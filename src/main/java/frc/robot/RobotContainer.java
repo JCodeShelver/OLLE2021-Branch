@@ -11,21 +11,25 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 
-import frc.robot.commands.Auton;
-import frc.robot.commands.DriveHuman;
-
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 public class RobotContainer
 {
-  Joystick leftStick        = new Joystick(Constants.LEFT_STICK_USB_PORT);
-  Joystick rightStick       = new Joystick(Constants.RIGHT_STICK_USB_PORT);
-  XboxController controller = new XboxController(Constants.CONTROLLER_USB_PORT);
+  private final Joystick        leftStick   = new Joystick(Constants.LEFT_STICK_USB_PORT);
+  private final Joystick        rightStick  = new Joystick(Constants.RIGHT_STICK_USB_PORT);
+  private final XboxController  controller  = new XboxController(Constants.CONTROLLER_USB_PORT);
 
-  private final DriveSystem driveSystem = new DriveSystem();
-  
+  private final DriveSystem     driveSystem = new DriveSystem();
+  private final GyroPID         gyroPID     = new GyroPID();
+  private final VisionPID       visionPID   = new VisionPID();
+  private final FrontIntake     frontIntake = new FrontIntake();
+  private final Loader          loader      = new Loader();
+  private final Shooter         shooter     = new Shooter();
+
   public RobotContainer()
   {
+    visionPID.LEDoff();
     configureButtonBindings();
 
     driveSystem.setDefaultCommand(new DriveHuman(
@@ -89,6 +93,7 @@ public class RobotContainer
     |---------------------------------------------------------------------------------------------------------------------------------------------------+
     */
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleMode());
+    new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch());
   }
 
   public Command getAutonomousCommand()

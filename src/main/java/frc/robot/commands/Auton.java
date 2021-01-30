@@ -28,6 +28,7 @@ public class Auton extends CommandBase
     public void initialize() 
     { 
         driveSystem.zeroEncoder();
+        driveSystem.toggleMode();
         driveTimer.reset();
         driveTimer.start();
     }
@@ -49,8 +50,10 @@ public class Auton extends CommandBase
     public boolean isFinished() 
     {
         if (driveTimer.get() >= DRIVE_TIME)
+        {
+            driveSystem.toggleMode();
             return true;
-        else
+        } else
             return false;
     }
 }

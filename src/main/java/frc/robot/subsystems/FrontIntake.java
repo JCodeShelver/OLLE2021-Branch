@@ -20,13 +20,14 @@ public class FrontIntake extends SubsystemBase
   private final DoubleSolenoid deployCylinder;
   private final TalonSRX intakeMotor, sideToSideMotor;
  
+  // Indicates if the Intake is deployed.
   private boolean isOut = false;
 
   // ----------------------------------------------------------------------------
   // Constructor
   public FrontIntake() 
   {
-    deployCylinder  = new DoubleSolenoid(Constants.PCM0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
+    deployCylinder  = new DoubleSolenoid(0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
     
     intakeMotor     = new TalonSRX(Constants.INTAKE_FRONTBACK_MOTOR_CAN_ID); 
     sideToSideMotor = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
