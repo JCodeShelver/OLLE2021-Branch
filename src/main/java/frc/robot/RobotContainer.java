@@ -36,6 +36,8 @@ public class RobotContainer
       driveSystem,
       () -> leftStick.getY(),
       () -> rightStick.getY()));
+
+    frontIntake.setDefaultCommand(new FrontIntakeManager(frontIntake, controller));
   }
 
   // ----------------------------------------------------------------------------
@@ -94,6 +96,13 @@ public class RobotContainer
     */
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleMode());
     new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch());
+    
+    new JoystickButton(rightStick, 6).whenPressed(() -> frontIntake.move());
+    new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed());
+
+    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(() -> frontIntake.debug());
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());
+    
   }
 
   public Command getAutonomousCommand()

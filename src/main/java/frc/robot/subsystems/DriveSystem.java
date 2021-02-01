@@ -1,4 +1,4 @@
-// BlitzCreek 3770 - Genesis Project
+// BlitzCreek 3770 - OLLE 2021
 // DriveSystem Subsystem
 // Controlls the drivetrain
 
@@ -20,7 +20,7 @@ public class DriveSystem extends SubsystemBase
   private CANSparkMax rightMotor1, rightMotor2;
   private Counter leftEncoder, rightEncoder;
 
-  private boolean linearOn; // Determines driving input mode.
+  private boolean linearOn, fullSpeed = true; // Determines driving input mode.
 
   private double adjustedLeft, adjustedRight;
   
@@ -30,8 +30,6 @@ public class DriveSystem extends SubsystemBase
     leftMotor2  = new CANSparkMax(Constants.LEFT_MOTOR2_CAN_ID, MotorType.kBrushless);
     rightMotor1 = new CANSparkMax(Constants.RIGHT_MOTOR1_CAN_ID, MotorType.kBrushless);
     rightMotor2 = new CANSparkMax(Constants.RIGHT_MOTOR2_CAN_ID, MotorType.kBrushless);
-
-    linearOn = true;
 
     leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -43,6 +41,12 @@ public class DriveSystem extends SubsystemBase
   {
     linearOn = !linearOn;
   }
+
+  public void toggleSpeed()
+  {
+    fullSpeed = !fullSpeed;
+  }
+
   public double[] manipInput(double left, double right)
   {
     if (linearOn)
@@ -61,6 +65,12 @@ public class DriveSystem extends SubsystemBase
         adjustedRight = right * right;
     }
 
+    if (!fullSpeed)
+    {
+      adjustedLeft /= 2.0;
+      adjustedRight /= 2.0;
+    }
+    
     double[] adjustedLR = {adjustedLeft, adjustedRight};
     return adjustedLR;
   }

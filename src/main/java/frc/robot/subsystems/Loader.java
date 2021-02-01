@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class Loader extends SubsystemBase 
 { 
   // Set vars
-  private final DigitalInput backSwitch, closeSwitch, intakeSwitch;
+  private final DigitalInput backSwitch, fullSwitch, intakeSwitch;
   private final TalonSRX loadingMotor, movingMotor;
 
   // ----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ public class Loader extends SubsystemBase
     movingMotor    = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID); 
     
     backSwitch     = new DigitalInput(2);
-    closeSwitch    = new DigitalInput(1);
+    fullSwitch     = new DigitalInput(1);
     intakeSwitch   = new DigitalInput(0);   
   }
 
@@ -48,10 +48,10 @@ public class Loader extends SubsystemBase
   }
 
   // ----------------------------------------------------------------------------
-  // Returns the state of the close sensor.
+  // Returns the state of the full sensor.
   public boolean ballInSystem()
   {
-    return !closeSwitch.get();
+    return !fullSwitch.get();
   }
 
   // ----------------------------------------------------------------------------

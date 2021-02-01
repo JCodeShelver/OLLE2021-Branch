@@ -18,28 +18,50 @@ public class FrontIntake extends SubsystemBase
 { 
   // Set vars
   private final DoubleSolenoid deployCylinder;
-  private final TalonSRX intakeMotor, sideToSideMotor;
+  private final TalonSRX intakeMotor, STSMotor;
  
   // Indicates if the Intake is deployed.
-  private boolean isOut = false;
+  private boolean isOut, isDisabled = false;
 
   // ----------------------------------------------------------------------------
   // Constructor
   public FrontIntake() 
   {
     deployCylinder  = new DoubleSolenoid(0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
+    deployCylinder.set(DoubleSolenoid.Value.kForward);
     
     intakeMotor     = new TalonSRX(Constants.INTAKE_FRONTBACK_MOTOR_CAN_ID); 
-    sideToSideMotor = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
-    
+    STSMotor        = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
   }
   
   // ----------------------------------------------------------------------------
   // Manage the Intake mechanism motors.
   public void driveIntakeMotors(double input) 
   {
-    intakeMotor.set(ControlMode.PercentOutput, input); 
-    sideToSideMotor.set(ControlMode.PercentOutput, input);
+    if (!isDisabled)
+    {
+      intakeMotor.set(ControlMode.PercentOutput, input); 
+      STSMotor.set(ControlMode.PercentOutput, input);
+    } else {
+      intakeMotor.set(ControlMode.PercentOutput, 0);
+      STSMotor.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  // ----------------------------------------------------------------------------
+  // Stops the intake motors.
+  public void stop()
+  {
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    STSMotor.set(ControlMode.PercentOutput, 0);
+
+    isDisabled = !isDisabled;
+  }
+
+  // Fix isOut
+  public void debug()
+  {
+    isOut = !isOut;
   }
   
   // ----------------------------------------------------------------------------
@@ -50,18 +72,10 @@ public class FrontIntake extends SubsystemBase
   }
   
   // ----------------------------------------------------------------------------
-  // Stows the Front part of the Intake mechanism.
-  public void pullUp() 
+  // Either stows or deploys the Front part of the Intake mechanism.
+  public void move() 
   {
-    deployCylinder.set(DoubleSolenoid.Value.kReverse);
-    isOut = false;
-  }
-
-  // ----------------------------------------------------------------------------
-  // Deploys the Front part of the Intake mechanism. 
-  public void pushDown() 
-  {
-    deployCylinder.set(DoubleSolenoid.Value.kForward);
-    isOut = true;
+    deployCylinder.toggle();
+    isOut = !isOut;
   }
 }

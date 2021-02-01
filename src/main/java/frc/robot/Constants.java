@@ -1,4 +1,4 @@
-// BlitzCreek 3770 - Genesis Project
+// BlitzCreek 3770 - OLLE 2021
 // Constants File
 // Many of the constants in one file.
 
@@ -59,9 +59,6 @@ public final class Constants
     public static final double SHOOTER_PID_D                     = 0.000175;
     public static final double SHOOTER_TICKS_PER_RPM             = 6.837;
     
-    // Enumerated type for toggling pneumatics
-    public static enum IntakeMovementActions {INTAKE, SHOOTER};
-
     // PCM 0 Ports
     public static final int SHOOTER_FIRE_CYLINDER_INPORT         = 0;
     public static final int SHOOTER_FIRE_CYLINDER_OUTPORT        = 1;
