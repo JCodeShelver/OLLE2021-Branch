@@ -54,15 +54,8 @@ public class DriveSystem extends SubsystemBase
       adjustedLeft = left;
       adjustedRight = right;
     } else {
-      if (left < 0)
-        adjustedLeft = -left * left;
-      else
-        adjustedLeft = left * left;
-      
-      if (right < 0)
-        adjustedRight = -right * right;
-      else
-        adjustedRight = right * right;
+        adjustedLeft = left * Math.abs(left);
+        adjustedRight = right * Math.abs(right);
     }
 
     if (!fullSpeed)
@@ -77,10 +70,12 @@ public class DriveSystem extends SubsystemBase
 
   public void drive(double left, double right)
   {
-    leftMotor1.set(left);
-    leftMotor2.set(left);
-    rightMotor1.set(right);
-    rightMotor2.set(right);
+    double[] adjustedInputs = manipInput(left, right);
+    
+    leftMotor1.set(adjustedInputs[0]);
+    leftMotor2.set(adjustedInputs[0]);
+    rightMotor1.set(adjustedInputs[1]);
+    rightMotor2.set(adjustedInputs[1]);
   }
 
   public void kill()

@@ -1,6 +1,6 @@
 // BlitzCreek 3770 - OLLE 2021
 // Front Intake Command
-// Allows player input of the Front Intake
+// Awakens the Dragon
 
 package frc.robot.commands;
 
@@ -9,21 +9,21 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.FrontIntake;
+import frc.robot.subsystems.Loader;
 
-public class FrontIntakeManager extends CommandBase 
+public class WaketheDragon extends CommandBase 
 {
   private final FrontIntake frontIntake;
+  private final Loader      loader;
   
   private XboxController    controller;
-  
-  private double            input;
 
-  public FrontIntakeManager(FrontIntake f, XboxController c)
+  public WaketheDragon(FrontIntake f, Loader l)
   {
     frontIntake = f;
-    controller = c;
+    loader = l;
 
-    addRequirements(frontIntake);
+    addRequirements(frontIntake, loader);
   }
 
   // ----------------------------------------------------------------------------
@@ -35,28 +35,21 @@ public class FrontIntakeManager extends CommandBase
   }
 
   // ----------------------------------------------------------------------------
-  // Pipes in user input into the Front Intake Subsystem.
+  // Runs the front intake until a ball is picked up.
   @Override
   public void execute()
   { 
-    if (frontIntake.isOut())
-    {
-      if (Math.abs(controller.getTriggerAxis(Hand.kRight)) > 0.2)
-        input = controller.getTriggerAxis(Hand.kRight) * Math.abs(controller.getTriggerAxis(Hand.kRight));
-      else
-        input = 0;
-
-      frontIntake.driveIntakeMotors(input);
-    }
+    if (frontIntake.isOut() && !frontIntake.isDisabled() && !loader.ballAtIntake())
+      frontIntake.driveIntakeMotors(0.75);
     else
       frontIntake.driveIntakeMotors(0.0);
   }
 
   // ----------------------------------------------------------------------------
-  // This is a default command, so always return false.
+  // Stop when a ball is picked up.
   @Override
   public boolean isFinished() 
   {
-    return false;
+    return (!frontIntake.isOut() || loader.ballAtIntake() || frontIntake.isDisabled());
   }
 }

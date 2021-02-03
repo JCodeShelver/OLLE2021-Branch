@@ -28,7 +28,7 @@ public class FrontIntake extends SubsystemBase
   public FrontIntake() 
   {
     deployCylinder  = new DoubleSolenoid(0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
-    deployCylinder.set(DoubleSolenoid.Value.kForward);
+    deployCylinder.set(DoubleSolenoid.Value.kReverse);
     
     intakeMotor     = new TalonSRX(Constants.INTAKE_FRONTBACK_MOTOR_CAN_ID); 
     STSMotor        = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
@@ -58,17 +58,18 @@ public class FrontIntake extends SubsystemBase
     isDisabled = !isDisabled;
   }
 
-  // Fix isOut
-  public void debug()
-  {
-    isOut = !isOut;
-  }
-  
   // ----------------------------------------------------------------------------
   // Returns the state of the pneumatics for the Front part of the Intake mechanism.
   public boolean isOut()
   {
     return isOut;
+  }
+
+  // ----------------------------------------------------------------------------
+  // Returns if the Front Intake motors have been forcibly stopped.
+  public boolean isDisabled()
+  {
+    return isDisabled;
   }
   
   // ----------------------------------------------------------------------------
