@@ -94,6 +94,10 @@ public class RobotContainer
     */
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleMode());
     new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch());
+
+    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.stop());
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.deploy());
+    new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new AwaketheDragon(frontIntake, loader));
   }
 
   public Command getAutonomousCommand()

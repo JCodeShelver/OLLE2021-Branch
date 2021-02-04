@@ -1,4 +1,4 @@
-// BlitzCreek 3770 - Genesis Project
+// BlitzCreek 3770 - OLLE 2021
 // DriveSystem Subsystem
 // Controlls the drivetrain
 
@@ -20,7 +20,7 @@ public class DriveSystem extends SubsystemBase
   private CANSparkMax rightMotor1, rightMotor2;
   private Counter leftEncoder, rightEncoder;
 
-  private boolean linearOn; // Determines driving input mode.
+  private boolean linearOn, fullSpeed = true; // Determines driving input mode.
 
   private double adjustedLeft, adjustedRight;
   
@@ -30,8 +30,6 @@ public class DriveSystem extends SubsystemBase
     leftMotor2  = new CANSparkMax(Constants.LEFT_MOTOR2_CAN_ID, MotorType.kBrushless);
     rightMotor1 = new CANSparkMax(Constants.RIGHT_MOTOR1_CAN_ID, MotorType.kBrushless);
     rightMotor2 = new CANSparkMax(Constants.RIGHT_MOTOR2_CAN_ID, MotorType.kBrushless);
-
-    linearOn = true;
 
     leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -43,6 +41,7 @@ public class DriveSystem extends SubsystemBase
   {
     linearOn = !linearOn;
   }
+
   public double[] manipInput(double left, double right)
   {
     if (linearOn)
@@ -50,15 +49,14 @@ public class DriveSystem extends SubsystemBase
       adjustedLeft = left;
       adjustedRight = right;
     } else {
-      if (left < 0)
-        adjustedLeft = -left * left;
-      else
-        adjustedLeft = left * left;
-      
-      if (right < 0)
-        adjustedRight = -right * right;
-      else
-        adjustedRight = right * right;
+      adjustedLeft  = Math.abs(left) * left;
+      adjustedRight = Math.abs(right) * right;
+    }
+
+    if (!fullSpeed)
+    {
+      adjustedLeft /= 2;
+      adjustedRight /= 2;
     }
 
     double[] adjustedLR = {adjustedLeft, adjustedRight};
@@ -67,10 +65,12 @@ public class DriveSystem extends SubsystemBase
 
   public void drive(double left, double right)
   {
-    leftMotor1.set(left);
-    leftMotor2.set(left);
-    rightMotor1.set(right);
-    rightMotor2.set(right);
+    double[] adjustedInputs = manipInput(left, right);
+
+    leftMotor1.set(adjustedInputs[0]);
+    leftMotor2.set(adjustedInputs[0]);
+    rightMotor1.set(adjustedInputs[1]);
+    rightMotor2.set(adjustedInputs[1]);
   }
 
   public void kill()
