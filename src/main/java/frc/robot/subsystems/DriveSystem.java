@@ -42,6 +42,11 @@ public class DriveSystem extends SubsystemBase
     linearOn = !linearOn;
   }
 
+  public void toggleSpeed()
+  {
+    fullSpeed = !fullSpeed;
+  }
+
   public double[] manipInput(double left, double right)
   {
     if (linearOn)
@@ -49,16 +54,16 @@ public class DriveSystem extends SubsystemBase
       adjustedLeft = left;
       adjustedRight = right;
     } else {
-      adjustedLeft  = Math.abs(left) * left;
-      adjustedRight = Math.abs(right) * right;
+        adjustedLeft = left * Math.abs(left);
+        adjustedRight = right * Math.abs(right);
     }
 
     if (!fullSpeed)
     {
-      adjustedLeft /= 2;
-      adjustedRight /= 2;
+      adjustedLeft /= 2.0;
+      adjustedRight /= 2.0;
     }
-
+    
     double[] adjustedLR = {adjustedLeft, adjustedRight};
     return adjustedLR;
   }
@@ -66,7 +71,7 @@ public class DriveSystem extends SubsystemBase
   public void drive(double left, double right)
   {
     double[] adjustedInputs = manipInput(left, right);
-
+    
     leftMotor1.set(adjustedInputs[0]);
     leftMotor2.set(adjustedInputs[0]);
     rightMotor1.set(adjustedInputs[1]);

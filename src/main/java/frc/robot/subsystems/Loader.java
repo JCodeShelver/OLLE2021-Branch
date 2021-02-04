@@ -48,7 +48,7 @@ public class Loader extends SubsystemBase
   }
 
   // ----------------------------------------------------------------------------
-  // Returns the state of the close sensor.
+  // Returns the state of the full sensor.
   public boolean ballInSystem()
   {
     return !fullSwitch.get();

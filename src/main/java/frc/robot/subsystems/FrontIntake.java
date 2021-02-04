@@ -30,19 +30,9 @@ public class FrontIntake extends SubsystemBase
   {
     deployCylinder  = new DoubleSolenoid(0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
     deployCylinder.set(DoubleSolenoid.Value.kReverse);
-
+    
     intakeMotor     = new TalonSRX(Constants.INTAKE_FRONTBACK_MOTOR_CAN_ID); 
     STSMotor        = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
-  }
-  
-  // ----------------------------------------------------------------------------
-  // Manage the Intake mechanism motors.
-  public void stop()
-  {
-    intakeMotor.set(ControlMode.PercentOutput, 0.0);
-    STSMotor.set(ControlMode.PercentOutput, 0.0);
-
-    isDisabled = !isDisabled;
   }
 
   // ----------------------------------------------------------------------------
@@ -52,16 +42,26 @@ public class FrontIntake extends SubsystemBase
     intakeMotor.set(ControlMode.PercentOutput, input); 
     STSMotor.set(ControlMode.PercentOutput, input);
   }
-  
+
+  // ----------------------------------------------------------------------------
+  // Stops the intake motors.
+  public void stop()
+  {
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    STSMotor.set(ControlMode.PercentOutput, 0);
+    
+    isDisabled = !isDisabled;
+  }
+
   // ----------------------------------------------------------------------------
   // Returns the state of the pneumatics for the Front part of the Intake mechanism.
   public boolean isOut()
   {
     return isOut;
   }
-
+  
   // ----------------------------------------------------------------------------
-  // Returns the state of the pneumatics for the Front part of the Intake mechanism.
+  // Returns if the Front Intake motors have been forcibly stopped.
   public boolean isDisabled()
   {
     return isDisabled;
@@ -69,11 +69,11 @@ public class FrontIntake extends SubsystemBase
   
   // ----------------------------------------------------------------------------
   // Either stows or deploys the Front part of the Intake mechanism.
-  public void deploy() 
+  public void move() 
   {
     intakeMotor.set(ControlMode.PercentOutput, 0);
     STSMotor.set(ControlMode.PercentOutput, 0);
-    
+
     deployCylinder.toggle();
     
     isOut = !isOut;
