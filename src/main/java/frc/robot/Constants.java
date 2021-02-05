@@ -68,7 +68,8 @@ public final class Constants
 
     // --------------------------------------------------------------------------
     
-    public static boolean ballInShooter;
-    public static boolean EndgameEnabled;
-    public static boolean shooterSystemActive;
+    public static int     ballsInSystem                          = 0;
+    public static boolean ballInShooter                          = false;
+    public static boolean EndgameEnabled                         = false;
+    public static boolean shooterSystemActive                    = false;
 }

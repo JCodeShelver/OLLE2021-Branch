@@ -38,6 +38,7 @@ public class Shooter extends SubsystemBase
     BallInShooter  = new DigitalInput(3);
     shooterMotor   = new TalonSRX(Constants.SHOOTER_MOTOR_CAN_ID);
     ShooterPID     = new PIDController(Constants.SHOOTER_PID_P, Constants.SHOOTER_PID_I, Constants.SHOOTER_PID_D);
+    
     TPM            = 0;
 
     shooterPistonDown = true;
@@ -92,6 +93,7 @@ public class Shooter extends SubsystemBase
   {
     ShootingPiston.set(DoubleSolenoid.Value.kReverse);
     shooterPistonDown = false;
+    Constants.ballsInSystem --;
   }
   
   // ----------------------------------------------------------------------------

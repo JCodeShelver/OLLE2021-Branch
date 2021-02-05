@@ -97,7 +97,7 @@ public class RobotContainer
     
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed());
 
-    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new WaketheDragon(frontIntake, loader));
+    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakentheDragon(frontIntake, loader));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
     new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());    
   }

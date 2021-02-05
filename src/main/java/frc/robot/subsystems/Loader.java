@@ -19,14 +19,14 @@ public class Loader extends SubsystemBase
 { 
   // Set vars
   private final DigitalInput backSwitch, fullSwitch, intakeSwitch;
-  private final TalonSRX loadingMotor, movingMotor;
+  private final TalonSRX loadingMotor, queueingMotor;
 
   // ----------------------------------------------------------------------------
   // Constructor
   public Loader() 
   {
     loadingMotor   = new TalonSRX(Constants.LOADING_MOTOR_CAN_ID);
-    movingMotor    = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID); 
+    queueingMotor  = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID); 
     
     backSwitch     = new DigitalInput(2);
     fullSwitch     = new DigitalInput(1);
@@ -35,7 +35,7 @@ public class Loader extends SubsystemBase
 
   // ----------------------------------------------------------------------------
   // Returns the state of the back sensor.
-  public boolean ballAtBack()
+  public boolean ballWaiting()
   {
     return !backSwitch.get();
   }
@@ -70,15 +70,15 @@ public class Loader extends SubsystemBase
 
   // ----------------------------------------------------------------------------
   // Turn the moving motor of the Loader mechanism off.
-  public void MovingMotorOff() 
+  public void QueueMotorOff() 
   {
-    movingMotor.set(ControlMode.PercentOutput, 0.0); 
+    queueingMotor.set(ControlMode.PercentOutput, 0.0); 
   }  
 
   // ----------------------------------------------------------------------------
   // Turn the moving motor of the Loader mechanism on.
-  public void MovingMotorOn(double in) 
+  public void QueueMotorOn(double in) 
   {
-    movingMotor.set(ControlMode.PercentOutput, in); 
+    queueingMotor.set(ControlMode.PercentOutput, in); 
   }  
 }

@@ -4,21 +4,18 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.FrontIntake;
 import frc.robot.subsystems.Loader;
 
-public class WaketheDragon extends CommandBase 
+public class AwakentheDragon extends CommandBase 
 {
   private final FrontIntake frontIntake;
   private final Loader      loader;
   
-  private XboxController    controller;
 
-  public WaketheDragon(FrontIntake f, Loader l)
+  public AwakentheDragon(FrontIntake f, Loader l)
   {
     frontIntake = f;
     loader = l;
@@ -50,6 +47,7 @@ public class WaketheDragon extends CommandBase
   @Override
   public boolean isFinished() 
   {
+    Constants.ballsInSystem ++;
     return (!frontIntake.isOut() || loader.ballAtIntake() || frontIntake.isDisabled());
   }
 }
