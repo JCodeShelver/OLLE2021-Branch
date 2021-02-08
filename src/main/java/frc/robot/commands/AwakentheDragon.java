@@ -47,7 +47,12 @@ public class AwakentheDragon extends CommandBase
   @Override
   public boolean isFinished() 
   {
-    Constants.ballsInSystem ++;
-    return (!frontIntake.isOut() || loader.ballAtIntake() || frontIntake.isDisabled());
+    if (!frontIntake.isOut() || loader.ballAtIntake() || frontIntake.isDisabled())
+    {
+      Constants.ballsInSystem ++;
+      return true;
+    }
+    else
+      return false;
   }
 }

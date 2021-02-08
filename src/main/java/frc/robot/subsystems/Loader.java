@@ -21,6 +21,7 @@ public class Loader extends SubsystemBase
   private final DigitalInput backSwitch, fullSwitch, intakeSwitch;
   private final TalonSRX loadingMotor, queueingMotor;
 
+  public boolean plzStop;
   // ----------------------------------------------------------------------------
   // Constructor
   public Loader() 
@@ -30,7 +31,9 @@ public class Loader extends SubsystemBase
     
     backSwitch     = new DigitalInput(2);
     fullSwitch     = new DigitalInput(1);
-    intakeSwitch   = new DigitalInput(0);   
+    intakeSwitch   = new DigitalInput(0);  
+    
+    plzStop        = false; 
   }
 
   // ----------------------------------------------------------------------------
@@ -81,4 +84,21 @@ public class Loader extends SubsystemBase
   {
     queueingMotor.set(ControlMode.PercentOutput, in); 
   }  
+
+  public void stop()
+  {
+    QueueMotorOff();
+    LoadBallMotorOff();
+    plzStop = true;
+  }
+
+  public void ballCountUp()
+  {
+    Constants.ballsInSystem ++;
+  }
+
+  public void ballCountDown()
+  {
+    Constants.ballsInSystem --;
+  }
 }

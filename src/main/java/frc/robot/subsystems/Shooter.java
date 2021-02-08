@@ -128,6 +128,7 @@ public class Shooter extends SubsystemBase
   public void updateBallInShooter()
   {
     Constants.ballInShooter = !BallInShooter.get();
+    SmartDashboard.putString("DB/String 0", "Ball In Shooter: " + Constants.ballInShooter);
     SmartDashboard.putBoolean("Ball In Shooter", Constants.ballInShooter);
   }
 }
