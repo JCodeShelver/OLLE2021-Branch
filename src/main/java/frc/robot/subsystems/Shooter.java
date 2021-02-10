@@ -26,9 +26,9 @@ public class Shooter extends SubsystemBase
   private final PIDController  ShooterPID;
   private final TalonSRX       shooterMotor;
   
-  private boolean              shooterPistonDown, XGood, RPMGood;
+  private       boolean        shooterPistonDown, XGood, RPMGood;
   
-  private double               currentSetPoint, TPM;
+  private       double         currentSetPoint, TPM;
 
   // ----------------------------------------------------------------------------
   // Constructor - (Do nothing)
@@ -145,7 +145,7 @@ public class Shooter extends SubsystemBase
   public void updateBallInShooter()
   {
     Constants.ballInShooter = !BallInShooter.get();
-    SmartDashboard.putString("DB/String 0", "Ball In Shooter: " + Constants.ballInShooter);
+    //SmartDashboard.putString("DB/String 0", "Ball In Shooter: " + Constants.ballInShooter);
     SmartDashboard.putBoolean("Ball In Shooter", Constants.ballInShooter);
   }
 }

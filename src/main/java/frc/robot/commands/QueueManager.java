@@ -32,8 +32,6 @@ public class QueueManager extends CommandBase
   @Override
   public void initialize() 
   { 
-    ballsInQueue  = 0;
-
     ballWaiting   = false;
     isDone        = false;
   }
@@ -46,6 +44,7 @@ public class QueueManager extends CommandBase
   @Override
   public void execute()
   { 
+    shooter.updateBallInShooter();
     /* The running tally of balls doesn't matter to us in this command. In this command,
        we only need the number of balls in the Queue. If there is a ball in the shooter,
        we ignore it, if there's not, then we don't.
@@ -57,14 +56,14 @@ public class QueueManager extends CommandBase
     
     // SmartDashboard.putString("DB/String 1", "Balls In Queue: " + ballsInQueue);
     // SmartDashboard.putString("DB/String 2", "Balls In System: " + Constants.ballsControlled);
-    SmartDashboard.putNumber("Balls In Queue", ballsInQueue);
-    SmartDashboard.putNumber("Balls In System", Constants.ballsControlled);
+    SmartDashboard.putNumber("Balls In System", ballsInQueue);
+    SmartDashboard.putNumber("Balls Controlled", Constants.ballsControlled);
     // Logic for Belt Movement
 
     // First, is there a ball that can be loaded into the shooter?
     if (ballWaiting && !Constants.ballInShooter)
     {
-      // Turn the STSMotor on and the Queue Motor on.
+      // Turn the STSMotor on and the Queue Motor on. 
       loader.LoadBallMotorOn();
       loader.QueueMotorOn(0.5);
     }
@@ -72,6 +71,7 @@ public class QueueManager extends CommandBase
     else if (ballWaiting || ballsInQueue == 0)
     {
       loader.QueueMotorOff();
+      //loader.LoadBallMotorOff();
       isDone = true;
     }
     // If the shooter is active, then start moving the queue.
@@ -88,6 +88,8 @@ public class QueueManager extends CommandBase
     // Did we interrupt this by pressing LB?
     if (loader.getStop())
     {
+      loader.QueueMotorOff();
+      loader.LoadBallMotorOff();
       isDone = true;
       loader.setStop(false);
     }

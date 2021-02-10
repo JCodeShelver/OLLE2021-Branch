@@ -58,34 +58,37 @@ public class StartTheLauncher extends CommandBase {
   // 
   public void execute() 
   {
-    Distance = yToDistanceFormula(visionPID.getYValue());
-    SmartDashboard.putNumber("Distance from Target", Distance);
+    if (Constants.ballInShooter)
+    {
+      Distance = yToDistanceFormula(visionPID.getYValue());
+      SmartDashboard.putNumber("Distance from Target", Distance);
 
-   // RPM = distanceToRPMFormula(Distance);
+      // RPM = distanceToRPMFormula(Distance);
     
-    if (rightStick.getRawButton(5))
-      RPM = 1000;
-    else
-      RPM = 3700;
+      if (rightStick.getRawButton(2))
+        RPM = 500; // Old value 1000
+      else
+        RPM = 3700;
 
-    RPM += leftStick.getRawAxis(3) * 200;
+      RPM += leftStick.getRawAxis(3) * 200;
 
-    shooterSystem.setSetPoint(RPM);
-    shooterSystem.spinToSetPoint();
+      shooterSystem.setSetPoint(RPM);
+      shooterSystem.spinToSetPoint();
 
-    visionPID.LEDon();  // I'm blinded by the lights.
-    Constants.shooterSystemActive = true;
-    shooterSystem.updateBallInShooter();
-    visionPID.getVisionData();
-    
-    shooterSystem.setCanShoot((Math.abs(visionPID.getOutput()) <= 0.05), (Math.abs(shooterSystem.getSetPoint() - shooterSystem.getRPM()) <= 100));
+      visionPID.LEDon();  // I'm blinded by the lights.
+      Constants.shooterSystemActive = true;
+      shooterSystem.updateBallInShooter();
+      visionPID.getVisionData();
+      
+      shooterSystem.setCanShoot((Math.abs(visionPID.getOutput()) <= 0.05), (Math.abs(shooterSystem.getSetPoint() - shooterSystem.getRPM()) <= 100));
+    }
   }
   
   // --------------------------------------------------------------------------
   // 
   public boolean isFinished() 
   {
-    return false;
+    return (Constants.ballsControlled == 0);
   }
   
   // --------------------------------------------------------------------------
