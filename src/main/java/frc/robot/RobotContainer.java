@@ -6,10 +6,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -29,13 +30,14 @@ public class RobotContainer
 
   public RobotContainer()
   {
-    visionPID.LEDoff();
     configureButtonBindings();
 
     driveSystem.setDefaultCommand(new DriveHuman(
       driveSystem,
       () -> leftStick.getY(),
       () -> rightStick.getY()));
+    
+    shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
   }
 
   // ----------------------------------------------------------------------------
@@ -94,16 +96,18 @@ public class RobotContainer
     */
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleMode());
     new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch());
+    new JoystickButton(leftStick, 7).whenPressed(() -> shooter.shootBall());
     
     new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp());
     new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown());
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed());
 
-    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakentheDragon(frontIntake, loader));
-    new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new QueueManager(loader, shooter));
+    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader));
+    new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new SequentialCommandGroup(new QueueManager(loader, shooter), new StartTheLauncher(shooter, visionPID)));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> loader.stop());    
-    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());    
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
+    // new JoystickButton(controller, XboxController.Axis.kRightTrigger.value).whenActive(new ShootNow(shooter)); 
   }
 
   public Command getAutonomousCommand()

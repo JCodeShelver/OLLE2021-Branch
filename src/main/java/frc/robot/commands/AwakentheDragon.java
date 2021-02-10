@@ -9,13 +9,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.FrontIntake;
 import frc.robot.subsystems.Loader;
 
-public class AwakentheDragon extends CommandBase 
+public class AwakenTheDragon extends CommandBase 
 {
   private final FrontIntake frontIntake;
   private final Loader      loader;
   
 
-  public AwakentheDragon(FrontIntake f, Loader l)
+  public AwakenTheDragon(FrontIntake f, Loader l)
   {
     frontIntake = f;
     loader = l;
@@ -27,7 +27,7 @@ public class AwakentheDragon extends CommandBase
   // Initialization
   @Override
   public void initialize() 
-  { 
+  {
 
   }
 
@@ -49,7 +49,7 @@ public class AwakentheDragon extends CommandBase
   {
     if (!frontIntake.isOut() || loader.ballAtIntake() || frontIntake.isDisabled())
     {
-      Constants.ballsInSystem ++;
+      Constants.ballsControlled ++;
       return true;
     }
     else

@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase
   private final PIDController  ShooterPID;
   private final TalonSRX       shooterMotor;
   
-  private boolean              shooterPistonDown;
+  private boolean              shooterPistonDown, XGood, RPMGood;
   
   private double               currentSetPoint, TPM;
 
@@ -34,14 +34,31 @@ public class Shooter extends SubsystemBase
   // Constructor - (Do nothing)
   public Shooter() 
   {
-    ShootingPiston = new DoubleSolenoid(0, Constants.SHOOTER_FIRE_CYLINDER_INPORT, Constants.SHOOTER_FIRE_CYLINDER_OUTPORT);
-    BallInShooter  = new DigitalInput(3);
-    shooterMotor   = new TalonSRX(Constants.SHOOTER_MOTOR_CAN_ID);
-    ShooterPID     = new PIDController(Constants.SHOOTER_PID_P, Constants.SHOOTER_PID_I, Constants.SHOOTER_PID_D);
+    ShootingPiston    = new DoubleSolenoid(0, Constants.SHOOTER_FIRE_CYLINDER_INPORT, Constants.SHOOTER_FIRE_CYLINDER_OUTPORT);
+    BallInShooter     = new DigitalInput(3);
+    shooterMotor      = new TalonSRX(Constants.SHOOTER_MOTOR_CAN_ID);
+    ShooterPID        = new PIDController(Constants.SHOOTER_PID_P, Constants.SHOOTER_PID_I, Constants.SHOOTER_PID_D);
     
-    TPM            = 0;
+    TPM               = 0;
 
+    XGood             = false;
+    RPMGood           = false;
     shooterPistonDown = true;
+  }
+
+  // ----------------------------------------------------------------------------
+  // Sets the prerequisite bools for shooting.
+  public void setCanShoot(boolean newXGood, boolean newRPMGood)
+  {
+    XGood   = newXGood;
+    RPMGood = newRPMGood;
+  }
+
+  // ----------------------------------------------------------------------------
+  // Gets the prerequisite bools to shoot.
+  public boolean getCanShoot()
+  {
+    return XGood && RPMGood;
   }
 
   // ----------------------------------------------------------------------------
@@ -84,7 +101,7 @@ public class Shooter extends SubsystemBase
   // Set the Set Point.
   public void setSetPoint(double s)
   {
-    currentSetPoint = -s;
+    currentSetPoint = s;
   }
   
   // ----------------------------------------------------------------------------
@@ -93,7 +110,7 @@ public class Shooter extends SubsystemBase
   {
     ShootingPiston.set(DoubleSolenoid.Value.kReverse);
     shooterPistonDown = false;
-    Constants.ballsInSystem --;
+    Constants.ballsControlled --;
   }
   
   // ----------------------------------------------------------------------------
@@ -104,9 +121,9 @@ public class Shooter extends SubsystemBase
     TPM = shooterMotor.getSelectedSensorVelocity();
     SmartDashboard.putNumber("Shooter RPM", TPM / Constants.SHOOTER_TICKS_PER_RPM);
 
-    //currentSetPoint = -3700;
+    //currentSetPoint = 3700;
     System.out.println("Current Set point for RPM: " + currentSetPoint);
-    System.out.println("Current RPM: " +   this.getRPM());
+    System.out.println("Current RPM: " + this.getRPM());
 
     double pidOutput = ShooterPID.calculate(TPM / Constants.SHOOTER_TICKS_PER_RPM, currentSetPoint);
 

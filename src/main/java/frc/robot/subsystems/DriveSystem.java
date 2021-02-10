@@ -12,8 +12,6 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.Constants;
-
 public class DriveSystem extends SubsystemBase
 {
   private CANSparkMax leftMotor1, leftMotor2;
@@ -51,6 +49,12 @@ public class DriveSystem extends SubsystemBase
   {
     if (linearOn)
     {
+      if (!(Math.abs(left) < 0.1))
+      left = 0.0;
+    
+      if (!(Math.abs(right) < 0.1))
+        right = 0.0;
+      
       adjustedLeft = left;
       adjustedRight = right;
     } else {
@@ -63,7 +67,7 @@ public class DriveSystem extends SubsystemBase
       adjustedLeft /= 2.0;
       adjustedRight /= 2.0;
     }
-    
+
     double[] adjustedLR = {adjustedLeft, adjustedRight};
     return adjustedLR;
   }

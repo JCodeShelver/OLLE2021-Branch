@@ -10,13 +10,20 @@ public final class Constants
     public static final int RIGHT_STICK_USB_PORT = 1;
     public static final int CONTROLLER_USB_PORT  = 2;
 
-    // CAN ID's for DeltaBot2
-    // Left1: 2
-    // Left2: 3
-    // Right1: 1
-    // Right2: 4
-        
-    // Motor CAN ID's (OLLE)
+/*  CAN ID's for DeltaBot2
+    Left1: 2
+    Left2: 3
+    Right1: 1
+    Right2: 4
+    
+    Digital Inputs for OLLE 2021
+    Intake sensor: 0
+    **There was a fourth sensor to detect if it was full with an ID of 1, but the original
+      shooter sensor died, so we switched it out, since we aren't using it anyway.
+    Waiting sensor: 2
+    Shooter sensor: 3
+
+    Motor CAN ID's (OLLE) */
     public static final int RIGHT_MOTOR1_CAN_ID            = 4;
     public static final int RIGHT_MOTOR2_CAN_ID            = 5;
     public static final int LEFT_MOTOR1_CAN_ID             = 6;
@@ -68,8 +75,7 @@ public final class Constants
 
     // --------------------------------------------------------------------------
     
-    public static int     ballsInSystem                          = 0;
+    public static int     ballsControlled                        = 0;
     public static boolean ballInShooter                          = false;
-    public static boolean EndgameEnabled                         = false;
     public static boolean shooterSystemActive                    = false;
 }

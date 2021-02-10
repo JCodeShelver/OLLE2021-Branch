@@ -18,10 +18,10 @@ import frc.robot.Constants;
 public class Loader extends SubsystemBase 
 { 
   // Set vars
-  private final DigitalInput backSwitch, fullSwitch, intakeSwitch;
+  private final DigitalInput backSwitch, intakeSwitch;
   private final TalonSRX loadingMotor, queueingMotor;
 
-  public boolean plzStop;
+  private boolean plzStop;
   // ----------------------------------------------------------------------------
   // Constructor
   public Loader() 
@@ -30,7 +30,6 @@ public class Loader extends SubsystemBase
     queueingMotor  = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID); 
     
     backSwitch     = new DigitalInput(2);
-    fullSwitch     = new DigitalInput(1);
     intakeSwitch   = new DigitalInput(0);  
     
     plzStop        = false; 
@@ -48,13 +47,6 @@ public class Loader extends SubsystemBase
   public boolean ballAtIntake()
   {
     return !intakeSwitch.get();
-  }
-
-  // ----------------------------------------------------------------------------
-  // Returns the state of the full sensor.
-  public boolean ballInSystem()
-  {
-    return !fullSwitch.get();
   }
 
   // ----------------------------------------------------------------------------
@@ -89,16 +81,36 @@ public class Loader extends SubsystemBase
   {
     QueueMotorOff();
     LoadBallMotorOff();
-    plzStop = true;
+    setStop(true);
+  }
+  
+  // ----------------------------------------------------------------------------
+  // Getter for the plzStop variable.
+  public boolean getStop()
+  {
+    return plzStop;
   }
 
+  // ----------------------------------------------------------------------------
+  // Setter for the plzStop variable.
+  public void setStop(boolean value)
+  {
+    plzStop = value;
+  }
+
+  // ----------------------------------------------------------------------------
+  // TEMPORARY METHOD***
+  // Ups the Constants.ballsControlled variable (used for testing queue alone)
   public void ballCountUp()
   {
-    Constants.ballsInSystem ++;
+    Constants.ballsControlled ++;
   }
 
+  // ----------------------------------------------------------------------------
+  // TEMPORARY METHOD***
+  // Decrements the Constants.ballsControlled variable (used for testing queue alone)
   public void ballCountDown()
   {
-    Constants.ballsInSystem --;
+    Constants.ballsControlled --;
   }
 }
