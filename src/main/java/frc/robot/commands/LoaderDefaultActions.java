@@ -13,7 +13,7 @@ import frc.robot.subsystems.Loader;
 
 import frc.robot.Constants;
 
-public class DashboardDefault extends CommandBase
+public class LoaderDefaultActions extends CommandBase
 {
     // Set vars
     private final Loader    loader;
@@ -22,7 +22,7 @@ public class DashboardDefault extends CommandBase
     
     // --------------------------------------------------------------------------
     // Constructor
-    public DashboardDefault(Loader l)
+    public LoaderDefaultActions(Loader l)
     {
         // Capture references to existing robot subsystems.  Define them as requirements.
         loader = l;

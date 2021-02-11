@@ -6,11 +6,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -38,7 +37,7 @@ public class RobotContainer
       () -> rightStick.getY()));
     
     shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
-    loader.setDefaultCommand(new DashboardDefault(loader));
+    loader.setDefaultCommand(new LoaderDefaultActions(loader));
   }
 
   // ----------------------------------------------------------------------------
@@ -95,19 +94,19 @@ public class RobotContainer
     |    ``````    |6  /  Hat Y  /  D-Pad      | NOT BOUND                       | NOT BOUND                 | NOT BOUND                                |
     |---------------------------------------------------------------------------------------------------------------------------------------------------+
     */
-    new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleMode()); // Toggle Linear and Quadratic
-    new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
-    new JoystickButton(leftStick, 7).whenPressed(() -> shooter.shootBall()); // Shoot a ball.
+    new JoystickButton(leftStick, 5).whenPressed(driveSystem::toggleMode); // Toggle Linear and Quadratic
+    new JoystickButton(leftStick, 6).whenPressed(visionPID::lightModeSwitch); // Toggle lights on limelight.
+    new JoystickButton(leftStick, 7).whenPressed(shooter::shootBall); // Shoot a ball.
     
-    new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
-    new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
-    new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
+    new JoystickButton(rightStick, 5).whenPressed(loader::ballCountUp); // Temporary method to "catch" a ball.
+    new JoystickButton(rightStick, 6).whenPressed(loader::ballCountDown); // Temporary method to "uncatch" a ball.
+    new JoystickButton(rightStick, 11).whenPressed(driveSystem::toggleSpeed); // Toggle between full and half speed.
 
     new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.
-    new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new SequentialCommandGroup(new QueueManager(loader, shooter), new StartTheLauncher(shooter, visionPID)));
-    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
-    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> loader.stop());    
-    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
+    new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new QueueManager(loader, shooter).andThen(new StartTheLauncher(shooter, visionPID)));
+    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(frontIntake::move);
+    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(loader::stop);    
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(frontIntake::stop);   
     // new JoystickButton(controller, XboxController.Axis.kRightTrigger.value).whenActive(new ShootNow(shooter)); 
   }
 
