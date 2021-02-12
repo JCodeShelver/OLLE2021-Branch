@@ -9,22 +9,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
 import frc.robot.subsystems.Loader;
-import frc.robot.subsystems.Shooter;
 
 public class QueueManager extends CommandBase 
 {
   private final Loader  loader;
-  private final Shooter  shooter;
 
-  private       boolean ballWaiting, isDone;
+  private       boolean ballWaiting/*, isDone*/;
   private       int     ballsInQueue;
   
-  public QueueManager(Loader l, Shooter s)
+  public QueueManager(Loader l)
   {
     loader  = l;
-    shooter = s;
 
-    addRequirements(loader, shooter);
+    addRequirements(loader);
   }
 
   // ----------------------------------------------------------------------------
@@ -33,7 +30,7 @@ public class QueueManager extends CommandBase
   public void initialize() 
   { 
     ballWaiting   = false;
-    isDone        = false;
+    // isDone        = false;
   }
 
   // ----------------------------------------------------------------------------
@@ -44,7 +41,6 @@ public class QueueManager extends CommandBase
   @Override
   public void execute()
   { 
-    shooter.updateBallInShooter();
     /* The running tally of balls doesn't matter to us in this command. In this command,
        we only need the number of balls in the Queue. If there is a ball in the shooter,
        we ignore it, if there's not, then we don't.
@@ -72,7 +68,7 @@ public class QueueManager extends CommandBase
     {
       loader.QueueMotorOff();
       //loader.LoadBallMotorOff();
-      isDone = true;
+      // isDone = true;
     }
     // If the shooter is active, then start moving the queue.
     else if (Constants.shooterSystemActive)
@@ -86,13 +82,13 @@ public class QueueManager extends CommandBase
       loader.LoadBallMotorOff();
     
     // Did we interrupt this by pressing LB?
-    if (loader.getStop())
-    {
-      loader.QueueMotorOff();
-      loader.LoadBallMotorOff();
-      isDone = true;
-      loader.setStop(false);
-    }
+    // if (loader.getStop())
+    // {
+    //   loader.QueueMotorOff();
+    //   loader.LoadBallMotorOff();
+    //   isDone = true;
+    //   loader.setStop(false);
+    // }
   }
 
   // ----------------------------------------------------------------------------
@@ -100,6 +96,6 @@ public class QueueManager extends CommandBase
   @Override
   public boolean isFinished() 
   {
-    return isDone;
+    return false /*isDone*/;
   }
 }

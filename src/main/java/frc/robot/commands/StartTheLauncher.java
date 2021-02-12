@@ -64,13 +64,14 @@ public class StartTheLauncher extends CommandBase {
 
       // RPM = distanceToRPMFormula(Distance);
     
-      if (rightStick.getRawButton(2))
-        RPM = 500; // Old value 1000
-      else
-        RPM = 3700;
+      // if (rightStick.getRawButton(2))
+      //   RPM = 3700; // Old value 1000
+      // else
+      //   RPM = 100; // Old value of 3700
 
-      RPM += leftStick.getRawAxis(3) * 200;
+      // RPM += leftStick.getRawAxis(3) * 200;
 
+      RPM = 100;
       shooterSystem.setSetPoint(RPM);
       shooterSystem.spinToSetPoint();
 
@@ -80,6 +81,7 @@ public class StartTheLauncher extends CommandBase {
       visionPID.getVisionData();
       
       shooterSystem.setCanShoot((Math.abs(visionPID.getOutput()) <= 0.05), (Math.abs(shooterSystem.getSetPoint() - shooterSystem.getRPM()) <= 100));
+      SmartDashboard.putBoolean("Can Shoot", shooterSystem.getCanShoot());
     }
   }
   
@@ -87,7 +89,16 @@ public class StartTheLauncher extends CommandBase {
   // 
   public boolean isFinished() 
   {
-    return (Constants.ballsControlled == 0);
+    if (Constants.ballsControlled == 0)
+      return true;
+    
+    if (shooterSystem.getStop())
+    {
+      shooterSystem.setStop(false);
+      return true;
+    }
+    
+    return false;
   }
   
   // --------------------------------------------------------------------------

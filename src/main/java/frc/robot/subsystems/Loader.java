@@ -81,7 +81,7 @@ public class Loader extends SubsystemBase
   {
     QueueMotorOff();
     LoadBallMotorOff();
-    setStop(true);
+    this.setStop(true);
   }
   
   // ----------------------------------------------------------------------------
@@ -104,6 +104,9 @@ public class Loader extends SubsystemBase
   public void ballCountUp()
   {
     Constants.ballsControlled ++;
+    
+    if (Constants.ballsControlled > 3)
+      Constants.ballsControlled = 3;
   }
 
   // ----------------------------------------------------------------------------
@@ -112,5 +115,11 @@ public class Loader extends SubsystemBase
   public void ballCountDown()
   {
     Constants.ballsControlled --;
+    
+    if (Constants.ballsControlled < 0)
+      Constants.ballsControlled = 0;
+    
+    if (Constants.ballsControlled == 0 && Constants.ballInShooter)
+      Constants.ballsControlled = 1;
   }
 }

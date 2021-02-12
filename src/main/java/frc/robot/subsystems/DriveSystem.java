@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Counter;
-
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
@@ -74,6 +73,8 @@ public class DriveSystem extends SubsystemBase
 
   public void drive(double left, double right)
   {
+    // SmartDashboard.putNumber("LeftRaw", left);
+    // SmartDashboard.putNumber("RightRaw", right);
     double[] adjustedInputs = manipInput(left, right);
     
     leftMotor1.set(adjustedInputs[0]);

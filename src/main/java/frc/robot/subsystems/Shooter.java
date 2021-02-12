@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase
   private final PIDController  ShooterPID;
   private final TalonSRX       shooterMotor;
   
-  private       boolean        shooterPistonDown, XGood, RPMGood;
+  private       boolean        shooterPistonDown, XGood, RPMGood, plzStop;
   
   private       double         currentSetPoint, TPM;
 
@@ -41,9 +41,25 @@ public class Shooter extends SubsystemBase
     
     TPM               = 0;
 
+    plzStop           = false;
     XGood             = false;
     RPMGood           = false;
     shooterPistonDown = true;
+  }
+
+  // ----------------------------------------------------------------------------
+  // Sets the plzStop bool to indicate that we want to stop.
+  public void setStop(boolean value)
+  {
+    plzStop = value;
+    SmartDashboard.putBoolean("Shooter EStop", plzStop);
+  }
+
+  // ----------------------------------------------------------------------------
+  // Gets the plzStop bool to see if we want to stop.
+  public boolean getStop()
+  {
+    return plzStop;
   }
 
   // ----------------------------------------------------------------------------
@@ -65,7 +81,7 @@ public class Shooter extends SubsystemBase
   // Get the RPM of the motor of the Shooter mechanism.
   public double getRPM()
   {
-    return shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_TICKS_PER_RPM;
+    return -shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_TICKS_PER_RPM;
   }
   
   // ----------------------------------------------------------------------------
@@ -94,7 +110,7 @@ public class Shooter extends SubsystemBase
   // Set the motor of the Shooter mechanism to full speed.
   public void motorOnFull()
   {
-    shooterMotor.set(ControlMode.PercentOutput, -1.0);
+    shooterMotor.set(ControlMode.PercentOutput, -1.0); // Something is wrong here.... negative goes clockwise...
   }
   
   // ----------------------------------------------------------------------------
@@ -108,9 +124,12 @@ public class Shooter extends SubsystemBase
   // Raise the Shooter mechanism pneumatic.
   public void shootBall()
   {
-    ShootingPiston.set(DoubleSolenoid.Value.kReverse);
-    shooterPistonDown = false;
-    Constants.ballsControlled --;
+    // if (self.getCanShoot())
+    // {
+      ShootingPiston.set(DoubleSolenoid.Value.kReverse);
+      shooterPistonDown = false;
+      Constants.ballsControlled --;
+    // }
   }
   
   // ----------------------------------------------------------------------------
@@ -118,16 +137,20 @@ public class Shooter extends SubsystemBase
   // Precondition:  SetPoint has been set!
   public void spinToSetPoint()
   {
-    TPM = shooterMotor.getSelectedSensorVelocity();
+    // TPM is negative for some reason... so we are going to invert it.
+    TPM = -shooterMotor.getSelectedSensorVelocity();
+    
+    System.out.println("Current TPM: " + TPM);
     SmartDashboard.putNumber("Shooter RPM", TPM / Constants.SHOOTER_TICKS_PER_RPM);
-
+    
     //currentSetPoint = 3700;
     System.out.println("Current Set point for RPM: " + currentSetPoint);
     System.out.println("Current RPM: " + this.getRPM());
 
     double pidOutput = ShooterPID.calculate(TPM / Constants.SHOOTER_TICKS_PER_RPM, currentSetPoint);
 
-    //System.out.println("Motor: " + pidOutput);
+    System.out.println("Motor: " + pidOutput);
+    
     shooterMotor.set(ControlMode.PercentOutput, pidOutput);
   }
 

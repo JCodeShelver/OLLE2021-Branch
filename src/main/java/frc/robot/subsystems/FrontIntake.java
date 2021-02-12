@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Import External Libraries
 import com.ctre.phoenix.motorcontrol.*;
@@ -50,6 +51,7 @@ public class FrontIntake extends SubsystemBase
     STSMotor.set(ControlMode.PercentOutput, 0);
     
     isDisabled = !isDisabled;
+    SmartDashboard.putBoolean("Intake EStop", isDisabled);
   }
 
   // ----------------------------------------------------------------------------
@@ -70,6 +72,7 @@ public class FrontIntake extends SubsystemBase
   // Either stows or deploys the Front part of the Intake mechanism.
   public void move() 
   {
+    SmartDashboard.putBoolean("Intake Pneumatic", deployCylinder.get() == DoubleSolenoid.Value.kReverse);
     intakeMotor.set(ControlMode.PercentOutput, 0);
     STSMotor.set(ControlMode.PercentOutput, 0);
 

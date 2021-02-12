@@ -5,6 +5,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Import Subsystems
@@ -33,8 +34,8 @@ public class ShootDefaultActions extends CommandBase
     // --------------------------------------------------------------------------
     // Initialization
     public void initialize() 
-    {
-        
+    {        
+        visionPID.LEDoff();
     }
     
     // --------------------------------------------------------------------------
@@ -43,8 +44,7 @@ public class ShootDefaultActions extends CommandBase
     {
         shooter.updateBallInShooter();
         shooter.stop();
-
-        visionPID.LEDoff();
+        SmartDashboard.putBoolean("Can Shoot", false);
     }
     
     // --------------------------------------------------------------------------
