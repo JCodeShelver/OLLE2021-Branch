@@ -64,14 +64,13 @@ public class StartTheLauncher extends CommandBase {
 
       // RPM = distanceToRPMFormula(Distance);
     
-      // if (rightStick.getRawButton(2))
-      //   RPM = 3700; // Old value 1000
-      // else
-      //   RPM = 100; // Old value of 3700
+      if (rightStick.getRawButton(2))
+        RPM = 3700; // Old value 1000
+      else
+        RPM = 1000; // Old value of 3700
 
-      // RPM += leftStick.getRawAxis(3) * 200;
+      RPM += leftStick.getRawAxis(3) * 200;
 
-      RPM = 100;
       shooterSystem.setSetPoint(RPM);
       shooterSystem.spinToSetPoint();
 
@@ -112,8 +111,10 @@ public class StartTheLauncher extends CommandBase {
   // Convert Limelight's Y to distance away
   private double yToDistanceFormula(double y)
   {
-    //Bar in robo Room
-    //return 128 - 5.96 * (y) + 0.172 * (y * y);
+    // So Max found this via placing the robot a known distance away from the target,
+    // recording the y angle, repeating a couple times and finding the curve of best fit.
+    // Bar in robo Room
+    // return 128 - 5.96 * (y) + 0.172 * (y * y);
 
     //Actual target on test frame
     return 90.2 - 1.33 * y + 0.213 * y * y;

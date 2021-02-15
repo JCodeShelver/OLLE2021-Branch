@@ -34,7 +34,7 @@ public class DriveSystem extends SubsystemBase
     rightMotor2.setInverted(false);
   }
 
-  public void toggleMode()
+  public void toggleScale()
   {
     linearOn = !linearOn;
   }

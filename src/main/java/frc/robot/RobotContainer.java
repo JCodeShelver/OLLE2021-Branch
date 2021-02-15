@@ -95,7 +95,7 @@ public class RobotContainer
     |---------------------------------------------------------------------------------------------------------------------------------------------------+
     */
     new JoystickButton(leftStick, 3).whenPressed(visionPID::cameraModeSwitch); // Toggle limelight camera mode.
-    new JoystickButton(leftStick, 5).whenPressed(driveSystem::toggleMode); // Toggle Linear and Quadratic
+    new JoystickButton(leftStick, 5).whenPressed(driveSystem::toggleScale); // Toggle Linear and Quadratic
     new JoystickButton(leftStick, 6).whenPressed(visionPID::lightModeSwitch); // Toggle lights on limelight.
     // new JoystickButton(leftStick, 7).whenPressed(shooter::shootBall); // Shoot a ball.
     
