@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import javax.lang.model.util.ElementScanner6;
+
 // Import External Libraries
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -130,6 +132,8 @@ public class Shooter extends SubsystemBase
       shooterPistonDown = false;
       Constants.ballsControlled --;
     // }
+    if (Constants.ballsControlled < 0)
+      Constants.ballsControlled = 0;
   }
   
   // ----------------------------------------------------------------------------
@@ -169,6 +173,16 @@ public class Shooter extends SubsystemBase
   {
     Constants.ballInShooter = !BallInShooter.get();
     //SmartDashboard.putString("DB/String 0", "Ball In Shooter: " + Constants.ballInShooter);
-    SmartDashboard.putBoolean("Ball In Shooter", Constants.ballInShooter);
+    //SmartDashboard.putBoolean("Ball In Shooter", Constants.ballInShooter);
+  }
+
+  public void testToggleFiringPiston()
+  {
+    if (shooterPistonDown)
+      ShootingPiston.set(DoubleSolenoid.Value.kReverse);
+    else
+      ShootingPiston.set(DoubleSolenoid.Value.kForward);
+    
+    shooterPistonDown = !shooterPistonDown;
   }
 }

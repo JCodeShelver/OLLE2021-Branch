@@ -47,6 +47,9 @@ public class QueueManager extends CommandBase
     */
     ballsInQueue = (Constants.ballInShooter) ? Constants.ballsControlled - 1 : Constants.ballsControlled;
     
+    if (ballsInQueue < 0)
+      ballsInQueue = 0;
+
     // Set local variables to reduce usage of loader subsystem methods and for readablity.
     ballWaiting  = (loader.ballWaiting());  // Ball Waiting next to the shooter
     
@@ -54,7 +57,7 @@ public class QueueManager extends CommandBase
     // SmartDashboard.putString("DB/String 2", "Balls In System: " + Constants.ballsControlled);
     SmartDashboard.putNumber("Balls In System", ballsInQueue);
     SmartDashboard.putNumber("Balls Controlled", Constants.ballsControlled);
-    // Logic for Belt Movement
+     // Logic for Belt Movement
 
     // First, is there a ball that can be loaded into the shooter?
     if (ballWaiting && !Constants.ballInShooter)
@@ -64,7 +67,7 @@ public class QueueManager extends CommandBase
       loader.QueueMotorOn(0.5);
     }
     // If there isn't, but there is a ball waiting to be loaded, we are compacted.
-    else if (ballWaiting || ballsInQueue == 0)
+    else if (ballWaiting)
     {
       loader.QueueMotorOff();
       //loader.LoadBallMotorOff();
@@ -73,6 +76,8 @@ public class QueueManager extends CommandBase
     // If the shooter is active, then start moving the queue.
     else if (Constants.shooterSystemActive)
       loader.QueueMotorOn(0.5);
+    else if (ballsInQueue == 0)
+      loader.QueueMotorOff();
     // If there is a ball just picked up, then move it.
     else if (ballsInQueue > 0)
       loader.QueueMotorOn(0.5);

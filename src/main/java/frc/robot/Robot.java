@@ -26,9 +26,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Shooter RPM", 0.0);
     SmartDashboard.putNumber("Distance from Target", 0.0);
     SmartDashboard.putNumber("Balls Controlled", 0.0);
-    SmartDashboard.putNumber("Balls In Queue", 0.0);
-    SmartDashboard.putBoolean("Ball In Shooter", false);
-    SmartDashboard.putBoolean("Intake Pneumatic", false);
+    SmartDashboard.putNumber("Balls In System", 0.0);
+    //SmartDashboard.putBoolean("Ball In Shooter", false);
+    //SmartDashboard.putBoolean("Intake Pneumatic", false);
     
      // Lower Priority Variables
     SmartDashboard.putNumber("Vision X", 0.0);

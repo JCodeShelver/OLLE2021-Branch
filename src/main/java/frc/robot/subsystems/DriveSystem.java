@@ -49,7 +49,7 @@ public class DriveSystem extends SubsystemBase
     if (linearOn)
     {
       if (!(Math.abs(left) < 0.1))
-      left = 0.0;
+        left = 0.0;
     
       if (!(Math.abs(right) < 0.1))
         right = 0.0;

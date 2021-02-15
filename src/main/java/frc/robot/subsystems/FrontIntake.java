@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import javax.lang.model.util.ElementScanner6;
+
 // Import External Libraries
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;  
@@ -29,7 +31,6 @@ public class FrontIntake extends SubsystemBase
   public FrontIntake() 
   {
     deployCylinder  = new DoubleSolenoid(0, Constants.INTAKE_CYLINDER_INPORT, Constants.INTAKE_CYLINDER_OUTPORT);
-    deployCylinder.set(DoubleSolenoid.Value.kReverse);
     
     intakeMotor     = new TalonSRX(Constants.INTAKE_FRONTBACK_MOTOR_CAN_ID); 
     STSMotor        = new TalonSRX(Constants.INTAKE_SIDE_MOTOR_CAN_ID);
@@ -51,7 +52,6 @@ public class FrontIntake extends SubsystemBase
     STSMotor.set(ControlMode.PercentOutput, 0);
     
     isDisabled = !isDisabled;
-    SmartDashboard.putBoolean("Intake EStop", isDisabled);
   }
 
   // ----------------------------------------------------------------------------
@@ -72,11 +72,14 @@ public class FrontIntake extends SubsystemBase
   // Either stows or deploys the Front part of the Intake mechanism.
   public void move() 
   {
-    SmartDashboard.putBoolean("Intake Pneumatic", deployCylinder.get() == DoubleSolenoid.Value.kReverse);
+    //SmartDashboard.putBoolean("Intake Pneumatic", deployCylinder.get() == DoubleSolenoid.Value.kReverse);
     intakeMotor.set(ControlMode.PercentOutput, 0);
     STSMotor.set(ControlMode.PercentOutput, 0);
 
-    deployCylinder.toggle();
+    if (deployCylinder.get() == DoubleSolenoid.Value.kForward)
+      deployCylinder.set(DoubleSolenoid.Value.kReverse);
+    else
+      deployCylinder.set(DoubleSolenoid.Value.kForward);
     
     isOut = !isOut;
   }

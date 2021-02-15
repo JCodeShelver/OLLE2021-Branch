@@ -94,25 +94,26 @@ public class RobotContainer
     |    ``````    |6  /  Hat Y  /  D-Pad      | NOT BOUND                       | NOT BOUND                 | NOT BOUND                                |
     |---------------------------------------------------------------------------------------------------------------------------------------------------+
     */
-    new JoystickButton(leftStick, 3).whenPressed(visionPID::cameraModeSwitch); // Toggle limelight camera mode.
-    new JoystickButton(leftStick, 5).whenPressed(driveSystem::toggleScale); // Toggle Linear and Quadratic
-    new JoystickButton(leftStick, 6).whenPressed(visionPID::lightModeSwitch); // Toggle lights on limelight.
-    // new JoystickButton(leftStick, 7).whenPressed(shooter::shootBall); // Shoot a ball.
+    new JoystickButton(leftStick, 2).whenPressed(() -> shooter.shootBall()); // Shoot a ball.
+    new JoystickButton(leftStick, 3).whenPressed(() -> visionPID.cameraModeSwitch()); // Toggle limelight camera mode.
+    new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleScale()); // Toggle Linear and Quadratic
+    // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
-    new JoystickButton(rightStick, 5).whenPressed(loader::ballCountUp); // Temporary method to "catch" a ball.
-    new JoystickButton(rightStick, 6).whenPressed(loader::ballCountDown); // Temporary method to "uncatch" a ball.
-    new JoystickButton(rightStick, 11).whenPressed(driveSystem::toggleSpeed); // Toggle between full and half speed.
-
+    new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
+    new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
+    new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
+    
     new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.
+    new JoystickButton(controller, XboxController.Button.kB.value).whenPressed(() -> shooter.testToggleFiringPiston());
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
-    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(frontIntake::move);
+    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
 
     // Stop values include:
     // loader::stop (if you configure it as hybrid operated and not default like it is.)
     // frontIntake::stop
     // () -> shooter.setStop(true)
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.setStop(true));    
-    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(frontIntake::stop);   
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
     // new JoystickButton(controller, XboxController.Axis.kRightTrigger.value).whenActive(new ShootNow(shooter)); 
   }
 
