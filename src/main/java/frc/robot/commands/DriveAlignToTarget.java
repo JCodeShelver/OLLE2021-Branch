@@ -25,7 +25,7 @@ public class DriveAlignToTarget extends CommandBase
     private final Joystick leftStick   = new Joystick(Constants.LEFT_STICK_USB_PORT);
     private final Joystick rightStick  = new Joystick(Constants.RIGHT_STICK_USB_PORT);
 
-    private boolean doneTuring, doneTurning;
+    private boolean doneTurning;
     
     // For adjusting left/right motors for angle correction
     private double angleRotateMotorAdjust, idleTurnSpeed;

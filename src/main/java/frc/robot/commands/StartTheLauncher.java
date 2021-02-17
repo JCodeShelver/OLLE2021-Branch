@@ -51,6 +51,8 @@ public class StartTheLauncher extends CommandBase {
 
     leftStick = new Joystick(Constants.LEFT_STICK_USB_PORT);
     rightStick = new Joystick(Constants.RIGHT_STICK_USB_PORT);
+    
+    shooterSystem.updateBallInShooter();
   }
   
   // --------------------------------------------------------------------------
@@ -88,9 +90,9 @@ public class StartTheLauncher extends CommandBase {
   // 
   public boolean isFinished() 
   {
-    if (Constants.ballsControlled <= 0)
+    if (Constants.ballsControlled < 0 && !Constants.ballInShooter)
     {
-      // shooterSystem.stop();
+      shooterSystem.stop();
       return true;
     }
 
@@ -129,7 +131,7 @@ public class StartTheLauncher extends CommandBase {
   @Override 
   public void end(boolean interrupted)      
   { 
-    //shooterSystem.stop();
+    shooterSystem.stop();
     Constants.shooterSystemActive = false;
     visionPID.LEDoff();
   }

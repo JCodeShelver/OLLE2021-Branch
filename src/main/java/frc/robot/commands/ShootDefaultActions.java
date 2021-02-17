@@ -43,7 +43,7 @@ public class ShootDefaultActions extends CommandBase
     public void execute() 
     {
         shooter.updateBallInShooter();
-        //shooter.stop();
+        shooter.stop();
         SmartDashboard.putBoolean("Can Shoot", false);
     }
     

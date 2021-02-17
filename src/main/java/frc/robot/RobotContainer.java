@@ -104,13 +104,12 @@ public class RobotContainer
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
     new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.
-    new JoystickButton(controller, XboxController.Button.kB.value).whenPressed(() -> shooter.testToggleFiringPiston());
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
 
     // Stop values include:
-    // loader::stop (if you configure it as hybrid operated and not default like it is.)
-    // frontIntake::stop
+    // () -> loader.stop() (if you configure it as hybrid operated and not default like it is.)
+    // () -> frontIntake.stop()
     // () -> shooter.setStop(true)
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.setStop(true));    
     new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
