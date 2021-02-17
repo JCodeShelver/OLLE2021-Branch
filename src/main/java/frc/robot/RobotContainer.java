@@ -99,6 +99,7 @@ public class RobotContainer
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleScale()); // Toggle Linear and Quadratic
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
+    // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
     new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
     new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
@@ -113,7 +114,6 @@ public class RobotContainer
     // () -> shooter.setStop(true)
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.setStop(true));    
     new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
-    // new JoystickButton(controller, XboxController.Axis.kRightTrigger.value).whenActive(new ShootNow(shooter)); 
   }
 
   public Command getAutonomousCommand()

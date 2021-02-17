@@ -75,14 +75,13 @@ public class Shooter extends SubsystemBase
   // Gets the prerequisite bools to shoot.
   public boolean getCanShoot()
   {
-    return XGood && RPMGood;
+    return this.XGood && this.RPMGood;
   }
 
   // ----------------------------------------------------------------------------
   // Get the RPM of the motor of the Shooter mechanism.
   public double getRPM()
   {
-    // was a negative here.
     return shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_TICKS_PER_RPM;
   }
   
