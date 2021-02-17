@@ -67,9 +67,9 @@ public class StartTheLauncher extends CommandBase {
       if (rightStick.getRawButton(2))
         RPM = 1000; 
       else
-        RPM = 3700; 
+        RPM = 3700; // Old value of 3700
 
-      RPM += leftStick.getRawAxis(3) * 200;
+      // RPM += leftStick.getRawAxis(3) * 200;
 
       shooterSystem.setSetPoint(RPM);
       shooterSystem.spinToSetPoint();
@@ -88,11 +88,11 @@ public class StartTheLauncher extends CommandBase {
   // 
   public boolean isFinished() 
   {
-    if (Constants.ballsControlled <= 0)
-    {
-      // shooterSystem.stop();
-      return true;
-    }
+    // if (Constants.ballsControlled <= 0)
+    // {
+    //   shooterSystem.stop();
+    //   return true;
+    // }
 
     if (shooterSystem.getStop())
     {
@@ -129,7 +129,7 @@ public class StartTheLauncher extends CommandBase {
   @Override 
   public void end(boolean interrupted)      
   { 
-    //shooterSystem.stop();
+    shooterSystem.stop();
     Constants.shooterSystemActive = false;
     visionPID.LEDoff();
   }

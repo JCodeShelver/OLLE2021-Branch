@@ -61,7 +61,7 @@ public final class Constants
 
     // Shooter mechanism's PID settings.
     // PID_P = .0025, PID_I = 0.01, PID_D = 0.000175;
-    public static final double SHOOTER_PID_P                = 0.001;
+    public static final double SHOOTER_PID_P                = 0.0015;
     public static final double SHOOTER_PID_I                = 0.01;
     public static final double SHOOTER_PID_D                = 0.000175;
     public static final double SHOOTER_TICKS_PER_RPM        = 6.837;

@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import javax.lang.model.util.ElementScanner6;
-
 // Import External Libraries
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -39,6 +37,8 @@ public class Shooter extends SubsystemBase
     ShootingPiston    = new DoubleSolenoid(0, Constants.SHOOTER_FIRE_CYLINDER_INPORT, Constants.SHOOTER_FIRE_CYLINDER_OUTPORT);
     BallInShooter     = new DigitalInput(3);
     shooterMotor      = new TalonSRX(Constants.SHOOTER_MOTOR_CAN_ID);
+    shooterMotor.setSensorPhase(true);
+
     ShooterPID        = new PIDController(Constants.SHOOTER_PID_P, Constants.SHOOTER_PID_I, Constants.SHOOTER_PID_D);
     
     TPM               = 0;
@@ -76,14 +76,14 @@ public class Shooter extends SubsystemBase
   // Gets the prerequisite bools to shoot.
   public boolean getCanShoot()
   {
-    return XGood && RPMGood;
+    return this.XGood && this.RPMGood;
   }
 
   // ----------------------------------------------------------------------------
   // Get the RPM of the motor of the Shooter mechanism.
   public double getRPM()
   {
-    return -shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_TICKS_PER_RPM;
+    return shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_TICKS_PER_RPM;
   }
   
   // ----------------------------------------------------------------------------
@@ -142,7 +142,7 @@ public class Shooter extends SubsystemBase
   public void spinToSetPoint()
   {
     // TPM is negative for some reason... so we are going to invert it.
-    TPM = -shooterMotor.getSelectedSensorVelocity();
+    TPM = shooterMotor.getSelectedSensorVelocity();
     
     System.out.println("Current TPM: " + TPM);
     SmartDashboard.putNumber("Shooter RPM", TPM / Constants.SHOOTER_TICKS_PER_RPM);
@@ -174,15 +174,5 @@ public class Shooter extends SubsystemBase
     Constants.ballInShooter = !BallInShooter.get();
     //SmartDashboard.putString("DB/String 0", "Ball In Shooter: " + Constants.ballInShooter);
     //SmartDashboard.putBoolean("Ball In Shooter", Constants.ballInShooter);
-  }
-
-  public void testToggleFiringPiston()
-  {
-    if (shooterPistonDown)
-      ShootingPiston.set(DoubleSolenoid.Value.kReverse);
-    else
-      ShootingPiston.set(DoubleSolenoid.Value.kForward);
-    
-    shooterPistonDown = !shooterPistonDown;
   }
 }
