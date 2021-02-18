@@ -90,16 +90,15 @@ public class StartTheLauncher extends CommandBase {
   // 
   public boolean isFinished() 
   {
-    if (Constants.ballsControlled < 0 && !Constants.ballInShooter)
+    if (Constants.ballsControlled <= 0 && !Constants.ballInShooter)
     {
       shooterSystem.stop();
       return true;
     }
 
-    if (shooterSystem.getStop())
+    if (shooterSystem.isDisabled())
     {
-      shooterSystem.setStop(false);
-      shooterSystem.stop();
+      shooterSystem.mstop();
       return true;
     }
     

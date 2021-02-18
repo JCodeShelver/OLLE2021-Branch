@@ -112,8 +112,8 @@ public class RobotContainer
     // () -> loader.stop() (if you configure it as hybrid operated and not default like it is.)
     // () -> frontIntake.stop()
     // () -> shooter.setStop(true)
-    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.setStop(true));    
-    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.stop());   
+    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.stop());    
+    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.mstop());   
   }
 
   public Command getAutonomousCommand()

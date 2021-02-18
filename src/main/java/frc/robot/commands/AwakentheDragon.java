@@ -50,7 +50,7 @@ public class AwakenTheDragon extends CommandBase
   {
     if (!frontIntake.isOut() || frontIntake.isDisabled())
     {
-      frontIntake.stop();
+      frontIntake.mstop();
       return true;
     }
       else if (loader.ballAtIntake())

@@ -2,6 +2,21 @@
 // Auton Command
 // Basic Auton
 
+/*
+
+Plan for IRaH-GSC 2021
+
+Place robot on B1 if doing red and on D1 if doing blue.
+Angle the robot facing the first power cell.
+Use the distance traveled (measure) to determine route.
+Have code for each possibility and use it when route is determined.
+
+-> Drive Straight, starting at D1
+|- If you have gone either sqrt(31.25) or 5sqrt(2) feet, then:
+
+
+*/
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

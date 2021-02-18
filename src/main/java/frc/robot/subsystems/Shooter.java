@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase
   private final PIDController  ShooterPID;
   private final TalonSRX       shooterMotor;
   
-  private       boolean        shooterPistonDown, XGood, RPMGood, plzStop;
+  private       boolean        shooterPistonDown, XGood, RPMGood, isDisabled = false;
   
   private       double         currentSetPoint, TPM;
 
@@ -43,24 +43,22 @@ public class Shooter extends SubsystemBase
     
     TPM               = 0;
 
-    plzStop           = false;
-    XGood             = false;
-    RPMGood           = false;
     shooterPistonDown = true;
   }
 
   // ----------------------------------------------------------------------------
-  // Sets the plzStop bool to indicate that we want to stop.
-  public void setStop(boolean value)
+  // Forcibly stops the shooter mechanism
+  public void mstop()
   {
-    plzStop = value;
+    this.stop();
+    isDisabled = !isDisabled;
   }
 
   // ----------------------------------------------------------------------------
-  // Gets the plzStop bool to see if we want to stop.
-  public boolean getStop()
+  // Checks if the shooter motor has been forcibly stopped.
+  public boolean isDisabled()
   {
-    return plzStop;
+    return isDisabled;
   }
 
   // ----------------------------------------------------------------------------

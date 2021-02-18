@@ -43,7 +43,7 @@ public class FrontIntake extends SubsystemBase
 
   // ----------------------------------------------------------------------------
   // Stops the intake motors.
-  public void stop()
+  public void mstop()
   {
     intakeMotor.set(ControlMode.PercentOutput, 0);
     STSMotor.set(ControlMode.PercentOutput, 0);
