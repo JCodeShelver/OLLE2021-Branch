@@ -63,9 +63,12 @@ public class DriveAlignToTarget extends CommandBase
             angleRotateMotorAdjust = visionPID.getOutput();
             System.out.println("PID Output: " + angleRotateMotorAdjust);
             
-            // Adjust left/right motor sets to PID output.  Rotate
-            // as needed toward target angle (they are opposite signs)
-            // to make the wheels spin in opposite directions.
+            /* 
+                Adjust left/right motor sets to PID output.  Rotate as
+                needed toward target angle (they are opposite signs)
+                to make the wheels spin in opposite directions.
+            */
+
             double left  = (+angleRotateMotorAdjust * 0.5) + rightStick.getY()/4;
             double right = (-angleRotateMotorAdjust * 0.5) + rightStick.getY()/4;
 

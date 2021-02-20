@@ -51,39 +51,45 @@ public class StartTheLauncher extends CommandBase {
 
     leftStick = new Joystick(Constants.LEFT_STICK_USB_PORT);
     rightStick = new Joystick(Constants.RIGHT_STICK_USB_PORT);
-    
-    shooterSystem.updateBallInShooter();
   }
   
   // --------------------------------------------------------------------------
   // 
   public void execute() 
   {
-    if (Constants.ballInShooter) // Check if the ball is in the shooter when we start!
-    {
-      Distance = yToDistanceFormula(visionPID.getYValue());
-      SmartDashboard.putNumber("Distance from Target", Distance);
+    Distance = yToDistanceFormula(visionPID.getYValue());
+    SmartDashboard.putNumber("Distance from Target", Distance);
 
-      // RPM = distanceToRPMFormula(Distance);
+    // RPM = distanceToRPMFormula(Distance);
+  
+    if (rightStick.getRawButton(2))
+      RPM = 1000; 
+    else
+      RPM = 3700; // Old value of 3700
+
+    // RPM += leftStick.getRawAxis(3) * 200;
+
+    shooterSystem.setSetPoint(RPM);
+    shooterSystem.spinToSetPoint();
+
+    visionPID.LEDon();  // I'm blinded by the lights.
+    Constants.shooterSystemActive = true;
+    shooterSystem.updateBallInShooter();
+    visionPID.getVisionData();
     
-      if (rightStick.getRawButton(2))
-        RPM = 1000; 
-      else
-        RPM = 3700; // Old value of 3700
+    shooterSystem.setCanShoot((Math.abs(visionPID.getOutput()) <= 0.05), (Math.abs(shooterSystem.getSetPoint() - shooterSystem.getRPM()) <= 100));
+    SmartDashboard.putBoolean("Can Shoot", shooterSystem.getCanShoot());
 
-      // RPM += leftStick.getRawAxis(3) * 200;
-
-      shooterSystem.setSetPoint(RPM);
-      shooterSystem.spinToSetPoint();
-
-      visionPID.LEDon();  // I'm blinded by the lights.
-      Constants.shooterSystemActive = true;
-      shooterSystem.updateBallInShooter();
-      visionPID.getVisionData();
-      
-      shooterSystem.setCanShoot((Math.abs(visionPID.getOutput()) <= 0.05), (Math.abs(shooterSystem.getSetPoint() - shooterSystem.getRPM()) <= 100));
-      SmartDashboard.putBoolean("Can Shoot", shooterSystem.getCanShoot());
-    }
+    /*
+      After thinking about how to get the piston to stay up long enough to
+      shoot, I've replicated last year's code so that when a button is
+      pressed it shoots, otherwise it will lower the piston, and relies on 
+      the fact that humans are slow.
+    */
+    if (leftStick.getRawButton(2))
+      shooterSystem.shootBall();
+    else
+      shooterSystem.lowerShootingPiston();
   }
   
   // --------------------------------------------------------------------------
@@ -106,6 +112,18 @@ public class StartTheLauncher extends CommandBase {
   }
   
   // --------------------------------------------------------------------------
+  //
+  @Override 
+  public void end(boolean interrupted)      
+  {
+    if (interrupted)
+      shooterSystem.stop();
+     
+    Constants.shooterSystemActive = false;
+    visionPID.LEDoff();
+  }
+  
+  // --------------------------------------------------------------------------
   // Convert distance away to RPM
   private double distanceToRPMFormula(double d)
   {
@@ -116,29 +134,16 @@ public class StartTheLauncher extends CommandBase {
   // Convert Limelight's Y to distance away
   private double yToDistanceFormula(double y)
   {
-    // So Max found this via placing the robot a known distance away from the target,
-    // recording the y angle, repeating a couple times and finding the curve of best fit.
+    /* 
+      So Max found this via placing the robot a known distance away from the target,
+      recording the y angle, repeating a couple times and finding the curve of best
+      fit.
+    */
+
     // Bar in robo Room
     // return 128 - 5.96 * (y) + 0.172 * (y * y);
 
-    //Actual target on test frame
+    // Actual target on test frame
     return 90.2 - 1.33 * y + 0.213 * y * y;
-  }
-
-  // --------------------------------------------------------------------------
-  //
-  @Override 
-  public void end(boolean interrupted)      
-  { 
-    shooterSystem.stop();
-    Constants.shooterSystemActive = false;
-    visionPID.LEDoff();
-  }
-
-  // --------------------------------------------------------------------------
-  //
-  protected void interrupted() 
-  {
-    shooterSystem.stop();
   }
 }

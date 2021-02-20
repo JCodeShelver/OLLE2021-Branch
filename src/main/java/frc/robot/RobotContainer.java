@@ -94,7 +94,7 @@ public class RobotContainer
     |    ``````    |6  /  Hat Y  /  D-Pad      | NOT BOUND                       | NOT BOUND                 | NOT BOUND                                |
     |---------------------------------------------------------------------------------------------------------------------------------------------------+
     */
-    new JoystickButton(leftStick, 2).whenPressed(() -> shooter.shootBall()); // Shoot a ball.
+    // Left Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
     new JoystickButton(leftStick, 3).whenPressed(() -> visionPID.cameraModeSwitch()); // Toggle limelight camera mode.
     new JoystickButton(leftStick, 5).whenPressed(() -> driveSystem.toggleScale()); // Toggle Linear and Quadratic
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
@@ -111,8 +111,8 @@ public class RobotContainer
     // Stop values include:
     // () -> loader.stop() (if you configure it as hybrid operated and not default like it is.)
     // () -> frontIntake.stop()
-    // () -> shooter.setStop(true)
-    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.stop());    
+    // () -> shooter.stop()
+    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop());    
     new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.mstop());   
   }
 

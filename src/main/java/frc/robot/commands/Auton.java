@@ -11,6 +11,59 @@ Angle the robot facing the first power cell.
 Use the distance traveled (measure) to determine route.
 Have code for each possibility and use it when route is determined.
 
+Path Set A
+  0   1   2   3   4   5   6   7   8   9  10  11  12
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+A |###|---|---|---|---|---R---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+B |###S---|---|---|---|---|---B---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+C |###|---|---R---|---|---|---|---|---B---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+D |###S---|---|---|---R---|---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+E |###|---|---|---|---|---B---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+
+A-Red
+- Angled toward C3 from B1 (gyro will read 0° at true -arctan(0.5)°)
+- Pick up ball after 30sqrt(5) inches
+- Pick up ball after 30sqrt(5) inches
+- Turn -(arctan(0.5) + arctan(3))°
+- Pick up ball after 30sqrt(10) inches
+- Turn arctan(3)°
+- Go straight for 150 inches
+
+A-Blue
+- Angled toward E6 from D1 (gyro will read 0° at true -arctan(0.2)°)
+- Pick up ball after 30sqrt(26) inches
+- Turn -(arctan(0.2) + arctan(3))°
+- Pick up ball after 30sqrt(10) inches
+- Turn (arctan(3) + arctan(0.5))°
+- Pick up ball after 30sqrt(5) inches
+- Turn -(arctan(0.5))°
+- Go straight for 60 inches
+
+Path Set B
+  0   1   2   3   4   5   6   7   8   9  10  11  12
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+A |###|---|---|---|---|---|---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+B |###S---|---R---|---|---|---R---B---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+C |###|---|---|---|---|---|---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+D |###S---|---|---|---R---B---|---|---|---B---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+E |###|---|---|---|---|---|---|---|---|---|---|###|
+  |###|   |   |   |   |   |   |   |   |   |   |###|
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+
+
+
 -> Drive Straight, starting at D1
 |- If you have gone either sqrt(31.25) or 5sqrt(2) feet, then:
 
