@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class GyroPID extends PIDSubsystem 
 { 
 	// Set vars
-	private AHRS gyro;
+	private AHRS   gyro;
 	
 	private double currentSetpoint, pidOutput;
 
@@ -28,15 +28,14 @@ public class GyroPID extends PIDSubsystem
 	{
 		super(new PIDController(Constants.GYRO_PID_P, Constants.GYRO_PID_I, Constants.GYRO_PID_D));   
 
-        // Initialize gyroscope
-        try {
+    // Initialize gyroscope
+    try {
 			gyro = new AHRS(SPI.Port.kMXP);
 			resetGyro();
-		} catch (RuntimeException ex) 
-		{
-            System.out.println("Error instantiating navX MXP:  " + ex.getMessage());
-        }
-
+		} catch (RuntimeException ex) {
+      System.out.println("Error instantiating navX MXP:  " + ex.getMessage());
+    }
+    
 		getController().setTolerance(Constants.GYRO_PID_TOLERANCE);   // Degree tolerance for set point
 	}
 

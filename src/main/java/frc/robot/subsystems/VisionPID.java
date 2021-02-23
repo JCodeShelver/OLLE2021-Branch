@@ -14,15 +14,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 // Import Constants
 import frc.robot.Constants;
 
-
 public class VisionPID extends PIDSubsystem 
 { 
 	// Set vars
-	private NetworkTable table;
-	private NetworkTableEntry tx, ty, ta;
+	private NetworkTable 	     table;
+	private NetworkTableEntry 	 tx, ty, ta;
 	private NetworkTableInstance tableData;
 	
-	private double pidOutput, currentSetpoint;
+	private double 				 pidOutput, currentSetpoint;
 
 	// --------------------------------------------------------------------------
 	// Constructor
@@ -31,7 +30,7 @@ public class VisionPID extends PIDSubsystem
 		super(new PIDController(Constants.VISION_PID_P, Constants.VISION_PID_I, Constants.VISION_PID_D));   
 		
 		tableData = NetworkTableInstance.getDefault();
-        table 	  = tableData.getTable("limelight");
+    table 	  = tableData.getTable("limelight");
 
 		getController().setTolerance(Constants.VISION_X_PID_TOLERANCE);   // Degree tolerance for set point
 		getController().setSetpoint(Constants.VISION_X_OFFSET);
@@ -81,10 +80,7 @@ public class VisionPID extends PIDSubsystem
 	{
 		ta = table.getEntry("ta");
 		double a = ta.getDouble(0.0);
-		if (a > 0)
-			return true;
-		else
-			return false;
+		return (a > 0);
 	}
 
 	// --------------------------------------------------------------------------

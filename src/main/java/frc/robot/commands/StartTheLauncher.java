@@ -9,22 +9,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// Import Constants
+import frc.robot.Constants;
+
 // Import Subsystems
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.VisionPID;
 
-// Import Constants
-import frc.robot.Constants;
-
 public class StartTheLauncher extends CommandBase {
   // Set vars
-  private final Shooter shooterSystem;
+  private final Shooter   shooterSystem;
   private final VisionPID visionPID;
 
-  public Joystick leftStick, rightStick;
+  public        Joystick  leftStick, rightStick;
 
-  public boolean ballInPlace, RPMGood, shooterPistonUp, XGood;
-  public double Distance, RPM;
+  public        boolean   ballInPlace, RPMGood, shooterPistonUp, XGood;
+  public        double    Distance, RPM;
 
   // ----------------------------------------------------------------------------
   // Constructor: Capture time and motor level for straight drive
@@ -49,7 +49,7 @@ public class StartTheLauncher extends CommandBase {
     Distance   = 0;
     RPM        = 0;
 
-    leftStick = new Joystick(Constants.LEFT_STICK_USB_PORT);
+    leftStick  = new Joystick(Constants.LEFT_STICK_USB_PORT);
     rightStick = new Joystick(Constants.RIGHT_STICK_USB_PORT);
   }
   

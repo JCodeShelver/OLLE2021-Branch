@@ -118,7 +118,7 @@ public class RobotContainer
 
   public Command getAutonomousCommand()
   {
-    Command autonCommandChoice = new Auton(driveSystem);
+    Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);
     return autonCommandChoice;
   }
 }

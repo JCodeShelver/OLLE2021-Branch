@@ -51,7 +51,7 @@ public class Robot extends TimedRobot
   @Override
   public void disabledInit()
   {
-
+    Constants.currMode = Constants.Mode.DISABLED;
   }
 
   @Override
@@ -69,6 +69,8 @@ public class Robot extends TimedRobot
     {
       m_autonomousCommand.schedule();
     }
+
+    Constants.currMode = Constants.Mode.AUTONOMOUS;
   }
 
   @Override
@@ -84,6 +86,8 @@ public class Robot extends TimedRobot
     {
       m_autonomousCommand.cancel();
     }
+
+    Constants.currMode = Constants.Mode.TELEOP;
   }
 
   @Override
@@ -96,6 +100,7 @@ public class Robot extends TimedRobot
   public void testInit()
   {
     CommandScheduler.getInstance().cancelAll();
+    Constants.currMode = Constants.Mode.TEST;
   }
 
   @Override

@@ -8,22 +8,29 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+// Import Subsystems
 import frc.robot.subsystems.DriveSystem;
 
 public class DriveHuman extends CommandBase 
 {
-  private final DriveSystem driveSystem;
-  private DoubleSupplier leftValue;
-  private DoubleSupplier rightValue;
+  private final DriveSystem    driveSystem;
 
+  private       DoubleSupplier leftValue, rightValue;
+
+  // ----------------------------------------------------------------------------
+  // Constructor
   public DriveHuman(DriveSystem d, DoubleSupplier left, DoubleSupplier right)
   {
     driveSystem = d;
-    leftValue = left;
-    rightValue = right;
+
+    leftValue   = left;
+    rightValue  = right;
+    
     addRequirements(driveSystem);
   }
 
+  // ----------------------------------------------------------------------------
+  // Action to repeatedly run when command is scheduled.
   @Override
   public void execute()
   {

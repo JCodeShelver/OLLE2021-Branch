@@ -42,11 +42,11 @@ public final class Constants
     public static final double GYRO_PID_TOLERANCE = 2.0;
 
     // Autonomous Driving variables.
-    public static final double ANGLE_TOLERANCE              = 3.0;  // Stop turn if within this number of degrees
     public static final double DISTANCE_TOLERANCE           = 3.0;    // Absolute value of driving distance tolerance 
-    public static final double RAMP_DOWN_DIST               = 24.0;   // Distance (inches) to target to decelerate
     public static final double RAMP_UP_TIME                 = 1.0;    // Time to ramp up speed in auton
-    public static final double TURN_TIME_LIMIT              = 5.0;  // Stop turn after this time - as backup
+    public static final double RAMP_DOWN_DIST               = 24.0;   // Distance (inches) to target to decelerate
+    public static final double ANGLE_TOLERANCE              = 3.0;    // Stop turn if within this number of degrees
+    public static final double TURN_TIME_LIMIT              = 5.0;    // Stop turn after this time - as backup
 
     // Inches per Tick conversion for drive encoder.
     public static final double INCHES_PER_TICK              = 0.052019;
@@ -75,7 +75,10 @@ public final class Constants
 
     // --------------------------------------------------------------------------
     
-    public static int     ballsControlled                   = 0;
-    public static boolean ballInShooter                     = false;
-    public static boolean shooterSystemActive               = false;
+    public static enum  Mode    {AUTONOMOUS, TELEOP, TEST, DISABLED};
+    public static       Mode    currMode;
+    public static       int     ballsControlled                   = 0;
+    public static       boolean ballInShooter                     = false;
+    public static       boolean ballCaught                        = false;
+    public static       boolean shooterSystemActive               = false;
 }

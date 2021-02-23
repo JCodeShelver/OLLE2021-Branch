@@ -37,13 +37,13 @@ public class Shooter extends SubsystemBase
     ShootingPiston    = new DoubleSolenoid(0, Constants.SHOOTER_FIRE_CYLINDER_INPORT, Constants.SHOOTER_FIRE_CYLINDER_OUTPORT);
     BallInShooter     = new DigitalInput(3);
     shooterMotor      = new TalonSRX(Constants.SHOOTER_MOTOR_CAN_ID);
-    shooterMotor.setSensorPhase(true);
-
     ShooterPID        = new PIDController(Constants.SHOOTER_PID_P, Constants.SHOOTER_PID_I, Constants.SHOOTER_PID_D);
     
     TPM               = 0;
-
+    
     shooterPistonDown = true;
+
+    shooterMotor.setSensorPhase(true);
   }
 
   // ----------------------------------------------------------------------------
@@ -109,8 +109,7 @@ public class Shooter extends SubsystemBase
   // Set the motor of the Shooter mechanism to full speed.
   public void motorOnFull()
   {
-    // Was a negative here...
-    shooterMotor.set(ControlMode.PercentOutput, 1.0); // Something is wrong here.... negative goes clockwise...
+    shooterMotor.set(ControlMode.PercentOutput, 1.0);
   }
   
   // ----------------------------------------------------------------------------
@@ -130,6 +129,7 @@ public class Shooter extends SubsystemBase
       shooterPistonDown = false;
       Constants.ballsControlled --;
     // }
+
     if (Constants.ballsControlled < 0)
       Constants.ballsControlled = 0;
   }
@@ -139,8 +139,6 @@ public class Shooter extends SubsystemBase
   // Precondition:  SetPoint has been set!
   public void spinToSetPoint()
   {
-    // Was a negative here...
-    // TPM is negative for some reason... so we are going to invert it.
     TPM = shooterMotor.getSelectedSensorVelocity();
     
     System.out.println("Current TPM: " + TPM);

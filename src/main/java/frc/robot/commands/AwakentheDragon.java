@@ -4,9 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+// Import Constants
 import frc.robot.Constants;
+
+// Import Subsystems
 import frc.robot.subsystems.FrontIntake;
 import frc.robot.subsystems.Loader;
 
@@ -14,12 +17,11 @@ public class AwakenTheDragon extends CommandBase
 {
   private final FrontIntake frontIntake;
   private final Loader      loader;
-  
 
   public AwakenTheDragon(FrontIntake f, Loader l)
   {
     frontIntake = f;
-    loader = l;
+    loader      = l;
 
     addRequirements(frontIntake, loader);
   }
@@ -53,12 +55,27 @@ public class AwakenTheDragon extends CommandBase
       frontIntake.mstop();
       return true;
     }
-      else if (loader.ballAtIntake())
+    // Moved to entrance of conveyor
+    else if (loader.ballAtIntake() && !Constants.ballCaught)
     {
       Constants.ballsControlled ++;
-      return true;
+      
+      if (Constants.currMode == Constants.Mode.TELEOP)
+        return true;
+      else {
+        Constants.ballCaught = true;
+        return false;
+      }
     }
-    else
+    // Picked up by conveyor
+    else if (!loader.ballAtIntake() && Constants.ballCaught)
+    {
+      Constants.ballCaught = false;
+      
+      frontIntake.drive(0.0);
+      
+      return (Constants.ballsControlled == 3);
+    } else 
       return false;
   }
 }

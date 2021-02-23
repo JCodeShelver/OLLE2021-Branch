@@ -5,28 +5,35 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.Counter;
-import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+// Import Constants
+import frc.robot.Constants;
 
 public class DriveSystem extends SubsystemBase
 {
-  private CANSparkMax leftMotor1, leftMotor2;
-  private CANSparkMax rightMotor1, rightMotor2;
-  private Counter leftEncoder, rightEncoder;
+  // Set vars
+  private final CANSparkMax leftMotor1,  leftMotor2;
+  private final CANSparkMax rightMotor1, rightMotor2;
+  private final TalonSRX    encoderReading;
 
-  private boolean linearOn, fullSpeed = true; // Determines driving input mode.
+  private       boolean     linearOn, fullSpeed = true; // Determines driving input mode.
 
-  private double adjustedLeft, adjustedRight;
+  private       double      adjustedLeft, adjustedRight;
   
+  // ----------------------------------------------------------------------------
+  // Constructor
   public DriveSystem()
   {
-    leftMotor1  = new CANSparkMax(Constants.LEFT_MOTOR1_CAN_ID, MotorType.kBrushless);
-    leftMotor2  = new CANSparkMax(Constants.LEFT_MOTOR2_CAN_ID, MotorType.kBrushless);
-    rightMotor1 = new CANSparkMax(Constants.RIGHT_MOTOR1_CAN_ID, MotorType.kBrushless);
-    rightMotor2 = new CANSparkMax(Constants.RIGHT_MOTOR2_CAN_ID, MotorType.kBrushless);
+    leftMotor1     = new CANSparkMax(Constants.LEFT_MOTOR1_CAN_ID, MotorType.kBrushless);
+    leftMotor2     = new CANSparkMax(Constants.LEFT_MOTOR2_CAN_ID, MotorType.kBrushless);
+    rightMotor1    = new CANSparkMax(Constants.RIGHT_MOTOR1_CAN_ID, MotorType.kBrushless);
+    rightMotor2    = new CANSparkMax(Constants.RIGHT_MOTOR2_CAN_ID, MotorType.kBrushless);
+    
+    encoderReading = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID);
 
     leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -34,36 +41,42 @@ public class DriveSystem extends SubsystemBase
     rightMotor2.setInverted(false);
   }
 
+  // ----------------------------------------------------------------------------
+  // Toggles between linear scaling and quadratic scaling.
   public void toggleScale()
   {
     linearOn = !linearOn;
   }
 
+  // ----------------------------------------------------------------------------
+  // Toggles between full range of speed and only half range.
   public void toggleSpeed()
   {
     fullSpeed = !fullSpeed;
   }
 
+  // ----------------------------------------------------------------------------
+  // Manipulates the input based on speed and scaling vars, then returns an array.
   public double[] manipInput(double left, double right)
   {
     if (linearOn)
     {
-      if (!(Math.abs(left) < 0.1))
-        left = 0.0;
+      if (!(Math.abs(left)  < 0.1))
+        left  = 0.0;
     
       if (!(Math.abs(right) < 0.1))
         right = 0.0;
       
-      adjustedLeft = left;
+      adjustedLeft  = left;
       adjustedRight = right;
     } else {
-        adjustedLeft = left * Math.abs(left);
+        adjustedLeft  = left  * Math.abs(left);
         adjustedRight = right * Math.abs(right);
     }
 
     if (!fullSpeed)
     {
-      adjustedLeft /= 2.0;
+      adjustedLeft  /= 2.0;
       adjustedRight /= 2.0;
     }
 
@@ -71,6 +84,8 @@ public class DriveSystem extends SubsystemBase
     return adjustedLR;
   }
 
+  // ----------------------------------------------------------------------------
+  // Drives the motors based on HUMAN input.
   public void drive(double left, double right)
   {
     // SmartDashboard.putNumber("LeftRaw", left);
@@ -83,6 +98,19 @@ public class DriveSystem extends SubsystemBase
     rightMotor2.set(adjustedInputs[1]);
   }
 
+  // ----------------------------------------------------------------------------
+  // Raw drive method, used by Autonomous commands so as to not mess with the
+  // scale.
+  public void rdrive(double left, double right)
+  {
+    leftMotor1.set(left);
+    leftMotor2.set(left);
+    rightMotor1.set(right);
+    rightMotor2.set(right);
+  }
+
+  // ----------------------------------------------------------------------------
+  // Sets each motor to 0, stopping the robot.
   public void kill()
   {
     leftMotor1.set(0);
@@ -91,9 +119,17 @@ public class DriveSystem extends SubsystemBase
     rightMotor2.set(0);
   }
 
+  // ----------------------------------------------------------------------------
+  // Returns the distance traveled in inches.
+  public double getDistanceInches()
+  {
+    return encoderReading.getSelectedSensorPosition() / Constants.INCHES_PER_TICK;
+  }
+
+  // ----------------------------------------------------------------------------
+  // Zeroes the encoder.
   public void zeroEncoder()
   {
-    leftEncoder.reset();
-    rightEncoder.reset();
+    encoderReading.setSelectedSensorPosition(0);
   }
 }

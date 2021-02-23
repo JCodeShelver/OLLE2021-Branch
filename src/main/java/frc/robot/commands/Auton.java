@@ -29,7 +29,8 @@ E |###|---|---|---|---|---B---|---|---|---|---|###|
 
 A-Red
 - Angled toward C3 from B1 (gyro will read 0° at true -arctan(0.5)°)
-- Pick up ball after 30sqrt(5) inches
+$ Pick up ball after 30sqrt(5) inches
+- Turn (0°)
 - Pick up ball after 30sqrt(5) inches
 - Turn -(arctan(0.5) + arctan(3))°
 - Pick up ball after 30sqrt(10) inches
@@ -38,7 +39,7 @@ A-Red
 
 A-Blue
 - Angled toward E6 from D1 (gyro will read 0° at true -arctan(0.2)°)
-- Pick up ball after 30sqrt(26) inches
+$ Pick up ball after 30sqrt(26) inches
 - Turn -(arctan(0.2) + arctan(3))°
 - Pick up ball after 30sqrt(10) inches
 - Turn (arctan(3) + arctan(0.5))°
@@ -62,66 +63,113 @@ E |###|---|---|---|---|---|---|---|---|---|---|###|
   |###|   |   |   |   |   |   |   |   |   |   |###|
   |---|---|---|---|---|---|---|---|---|---|---|---|
 
+B-Red
+- Angled toward B3 from B1 (gyro will read 0° at true 0°)
+- Pick up ball after 60 inches
+- Turn 45°
+- Pick up ball after 60sqrt(2) inches
+- Turn -90°
+- Pick up ball after 60sqrt(2) inches
+- Turn 45°
+- Go straight for 120 inches
 
+B-Blue
+- Angled toward D6 from D1 (gyro will read 0° at true 0°)
+- Pick up ball after 150 inches
+- Turn -45°
+- Pick up ball after 60sqrt(2) inches
+- Turn 90°
+- Pick up ball after 60sqrt(2) inches
+- Turn -45°
+- Go straight for 30 inches
 
--> Drive Straight, starting at D1
-|- If you have gone either sqrt(31.25) or 5sqrt(2) feet, then:
+Proposed Idea:
+Have thresholds of distance traveled to see what scenario we are in.
+If 30sqrt(5) inches or 30sqrt(26) inches give or take...0.5 inches,
+  Turn PATH_POLARITY(PATH_SPECIFIC_ANGLE_1)°
+  Go straight 30sqrt(5)  or 30sqrt(10) inches
+  Turn -PATH_POLARITY(arctan(0.5) + arctan(3))°
+  Pick up ball after 30sqrt(5) or 30sqrt(10) inches
+  Turn PATH_POLARITY(PATH_SPECIFIC_FINISH_ANGLE)
+  Go straight for UNIQUE_FINISH_DISTANCE
 
+If 60 inches or 150 inches (give or take an inch)
+  Turn PATH_POLARITY(45°)
+  Pick up ball after 60sqrt(2) inches
+  Turn -PATH_POLARITY(90°)
+  Pick up ball after 60sqrt(2) inches
+  Turn to 0°
+  Go straight for UNIQUE_FINISH_DISTANCE
 
+Path-Specific-Angle (enum perhaps?)
+A-Red:  0
+A-Blue: arctan(0.2) + arctan(3)
+
+Path-Specific-Polarity
+Red:  +
+Blue: -
+
+Path-Specific-Finish-Angle
+A-Red:  arctan(3)
+A-Blue: arctan(0.5)
+
+Unique-Finish-Distance
+A-Red:  150
+A-Blue: 60
+B-Red:  120
+B-Blue: 30
 */
 
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+// Import Subsystems
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.FrontIntake;
+import frc.robot.subsystems.Loader;
 
 public class Auton extends CommandBase
 {
-    private final DriveSystem driveSystem;   // Reference to drive system object 
-    private Timer driveTimer = new Timer();
+  private final DriveSystem driveSystem;
+  private final FrontIntake frontIntake;
+  private final Loader      loader;
+  
+  public Auton(DriveSystem d, FrontIntake f, Loader l)
+  {
+    driveSystem = d;
+    frontIntake = f;
+    loader      = l;
 
-    private double DRIVE_TIME = 2.0;    // Duration of action
-
-    public Auton(DriveSystem d)
-    {
-        driveSystem = d;
-        addRequirements(driveSystem);
-    }
+    addRequirements(driveSystem, frontIntake, loader);
+  }
 
 	// ----------------------------------------------------------------------------
-    // Initiate shooting by starting action timer
-    @Override
-    public void initialize() 
-    { 
-        driveSystem.zeroEncoder();
-        driveSystem.toggleScale();
-        driveTimer.reset();
-        driveTimer.start();
-    }
+  // 
+  @Override
+  public void initialize() 
+  {
+    // Make sure we deploy the front Intake 
+    if (!frontIntake.isOut())
+      frontIntake.move();
+    
+    new AwakenTheDragon(frontIntake, loader);
+  }
 
-    // ----------------------------------------------------------------------------
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute()
-    {
-        if (driveTimer.get() < DRIVE_TIME)
-            driveSystem.drive(-0.5, -0.5);
-        else
-            driveSystem.drive(0.0, 0.0);
-    }
+  // ----------------------------------------------------------------------------
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute()
+  {
 
-    // ----------------------------------------------------------------------------
-    // Return true when timer reaches designated target time.
-    @Override
-    public boolean isFinished() 
-    {
-        if (driveTimer.get() >= DRIVE_TIME)
-        {
-            driveSystem.toggleScale();
-            return true;
-        } else
-            return false;
-    }
+  }
+
+  // ----------------------------------------------------------------------------
+  // Return true when timer reaches designated target time.
+  @Override
+  public boolean isFinished() 
+  {
+    return true;
+  }
 }

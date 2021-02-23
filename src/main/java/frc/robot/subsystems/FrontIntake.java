@@ -18,10 +18,10 @@ public class FrontIntake extends SubsystemBase
 { 
   // Set vars
   private final DoubleSolenoid deployCylinder;
-  private final TalonSRX intakeMotor, STSMotor;
+  private final TalonSRX       intakeMotor, STSMotor;
  
   // Indicates if the Intake is deployed.
-  private boolean isOut, isDisabled = false;
+  private       boolean        isOut, isDisabled = false;
 
   // ----------------------------------------------------------------------------
   // Constructor
