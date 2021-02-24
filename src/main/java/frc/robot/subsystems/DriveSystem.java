@@ -34,6 +34,7 @@ public class DriveSystem extends SubsystemBase
     rightMotor2    = new CANSparkMax(Constants.RIGHT_MOTOR2_CAN_ID, MotorType.kBrushless);
     
     encoderReading = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID);
+    this.zeroEncoder();
 
     leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -89,7 +90,7 @@ public class DriveSystem extends SubsystemBase
   public void drive(double left, double right)
   {
     // SmartDashboard.putNumber("LeftRaw", left);
-    // SmartDashboard.putNumber("RightRaw", right);
+    // SmartDashboard.putNumber("RightRaw", right);    
     double[] adjustedInputs = manipInput(left, right);
     
     leftMotor1.set(adjustedInputs[0]);
@@ -97,7 +98,7 @@ public class DriveSystem extends SubsystemBase
     rightMotor1.set(adjustedInputs[1]);
     rightMotor2.set(adjustedInputs[1]);
   }
-
+  
   // ----------------------------------------------------------------------------
   // Raw drive method, used by Autonomous commands so as to not mess with the
   // scale.
@@ -107,8 +108,10 @@ public class DriveSystem extends SubsystemBase
     leftMotor2.set(left);
     rightMotor1.set(right);
     rightMotor2.set(right);
+    System.out.println("Raw Data: " + Math.abs(encoderReading.getSelectedSensorPosition()));
+    System.out.println("Percieved Inches: " + this.getDistanceInches());
   }
-
+  
   // ----------------------------------------------------------------------------
   // Sets each motor to 0, stopping the robot.
   public void kill()
@@ -118,12 +121,12 @@ public class DriveSystem extends SubsystemBase
     rightMotor1.set(0);
     rightMotor2.set(0);
   }
-
+  
   // ----------------------------------------------------------------------------
   // Returns the distance traveled in inches.
   public double getDistanceInches()
   {
-    return encoderReading.getSelectedSensorPosition() / Constants.INCHES_PER_TICK;
+    return Math.abs(encoderReading.getSelectedSensorPosition() * Constants.INCHES_PER_TICK);
   }
 
   // ----------------------------------------------------------------------------

@@ -35,7 +35,7 @@ public class DriveStraight extends CommandBase
     gyroPID           = g;
 
     // Capture key parameters of drive segment
-    powerLevel        = power;
+    powerLevel        = -power;
     targetAngle       = angle;
     targetDistance    = distance;   
     
@@ -57,7 +57,7 @@ public class DriveStraight extends CommandBase
     // Initialize gyro and encoder sensors
     gyroPID.enable();
     gyroPID.setSetpoint(targetAngle);
-    gyroPID.setPvalue(0.02);
+    gyroPID.setPvalue(0.001);
     
     driveSystem.zeroEncoder();
   }
@@ -110,6 +110,7 @@ public class DriveStraight extends CommandBase
   public void end(boolean interrupted)
   {
     driveSystem.kill();
+    driveSystem.zeroEncoder();
     gyroPID.disable();
   }
 }

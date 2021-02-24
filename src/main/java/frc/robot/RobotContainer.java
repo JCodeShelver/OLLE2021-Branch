@@ -6,7 +6,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
@@ -118,7 +118,8 @@ public class RobotContainer
 
   public Command getAutonomousCommand()
   {
-    Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);
+    // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);
+    Command autonCommandChoice = new SequentialCommandGroup(new DriveStraight(driveSystem, gyroPID, 0.33, 70, 0.0))/*, new DriveTurn(driveSystem, gyroPID, -90.0), new DriveStraight(driveSystem, gyroPID, 0.5, 50, 0.0))*/;
     return autonCommandChoice;
   }
 }

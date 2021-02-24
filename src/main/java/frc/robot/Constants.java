@@ -49,7 +49,7 @@ public final class Constants
     public static final double TURN_TIME_LIMIT              = 5.0;    // Stop turn after this time - as backup
 
     // Inches per Tick conversion for drive encoder.
-    public static final double INCHES_PER_TICK              = 0.052019;
+    public static final double INCHES_PER_TICK              = 0.004656;
 
     // Limelight's PID settings.
     public static final double VISION_X_PID_TOLERANCE       = 1.0;    // Absolute vision distance angle range
