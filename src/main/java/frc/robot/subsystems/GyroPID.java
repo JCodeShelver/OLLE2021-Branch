@@ -3,6 +3,29 @@
 // Manages gyroscope mechanism and PID 
 // control with gyroscope.
 
+/*
+So the six degrees of freedom that a 3D object
+can move in (that is, along the x, y, and z 
+axes and rotating through them) have special
+names that are used to avoid confusion.
+
+             Y    Z
+             ^   x
+             |  /
+             | /
+<----------Object---------> X
+           / | 
+          /  |
+         x   V
+
+Forward and backward is called SURGE (think electricity surging through a cable).
+Left and right is called SWAY (think swaying side to side).
+Up and down is called HEAVE (think of your chest heaving as you breathe).
+YAW is rotation about the Y-axis (think turning around when standing up).
+PITCH is rotation about the X-axis (think falling forward).
+ROLL is rotation about Z-axis (think doing a cartwheel).
+*/
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -29,10 +52,13 @@ public class GyroPID extends PIDSubsystem
 		super(new PIDController(Constants.GYRO_PID_P, Constants.GYRO_PID_I, Constants.GYRO_PID_D));   
 
     // Initialize gyroscope
-    try {
+    try
+    {
 			gyro = new AHRS(SPI.Port.kMXP);
 			resetGyro();
-		} catch (RuntimeException ex) {
+    }
+    catch (RuntimeException ex)
+    {
       System.out.println("Error instantiating navX MXP:  " + ex.getMessage());
     }
     
@@ -81,7 +107,7 @@ public class GyroPID extends PIDSubsystem
 	@Override
 	public void useOutput(double output, double setpoint)
 	{
-		currentSetpoint  = setpoint;
-		pidOutput        = output;
+		currentSetpoint = setpoint;
+		pidOutput       = output;
 	}
 }	

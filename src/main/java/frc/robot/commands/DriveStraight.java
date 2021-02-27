@@ -35,7 +35,7 @@ public class DriveStraight extends CommandBase
     gyroPID           = g;
 
     // Capture key parameters of drive segment
-    powerLevel        = -power;
+    powerLevel        = power;
     targetAngle       = angle;
     targetDistance    = distance;   
     
@@ -70,7 +70,7 @@ public class DriveStraight extends CommandBase
     // Periodic action that runs while distance to targe exceeds tolerance.
     if (Math.abs(targetDistance - driveSystem.getDistanceInches()) > Constants.DISTANCE_TOLERANCE) 
     {
-      // Get motor adjustment derived from gyro.  This keeps driving in straight line.
+      // Get motor adjustment derived from gyro. This keeps us driving in straight line.
       angleMotorAdjust = gyroPID.getOutput();
       
       left             = powerLevel - angleMotorAdjust;

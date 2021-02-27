@@ -33,8 +33,8 @@ public class RobotContainer
 
     driveSystem.setDefaultCommand(new DriveHuman(
       driveSystem,
-      () -> leftStick.getY(),
-      () -> rightStick.getY()));
+      () -> -leftStick.getY(),
+      () -> -rightStick.getY()));
     
     shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
     loader.setDefaultCommand(new QueueManager(loader));

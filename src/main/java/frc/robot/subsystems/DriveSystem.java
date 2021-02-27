@@ -36,10 +36,10 @@ public class DriveSystem extends SubsystemBase
     encoderReading = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID);
     this.zeroEncoder();
 
-    leftMotor1.setInverted(true);
-    leftMotor2.setInverted(true);
-    rightMotor1.setInverted(false);
-    rightMotor2.setInverted(false);
+    leftMotor1.setInverted(false);
+    leftMotor2.setInverted(false);
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
   }
 
   // ----------------------------------------------------------------------------
@@ -62,8 +62,8 @@ public class DriveSystem extends SubsystemBase
   {
     if (linearOn)
     {
-      if (!(Math.abs(left)  < 0.1))
-        left  = 0.0;
+      if (!(Math.abs(left) < 0.1))
+        left = 0.0;
     
       if (!(Math.abs(right) < 0.1))
         right = 0.0;
