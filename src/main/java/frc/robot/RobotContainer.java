@@ -10,22 +10,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 public class RobotContainer
 {
-  private final Joystick        leftStick   = new Joystick(Constants.LEFT_STICK_USB_PORT);
-  private final Joystick        rightStick  = new Joystick(Constants.RIGHT_STICK_USB_PORT);
-  private final XboxController  controller  = new XboxController(Constants.CONTROLLER_USB_PORT);
+  private final Joystick       leftStick   = new Joystick(Constants.LEFT_STICK_USB_PORT);
+  private final Joystick       rightStick  = new Joystick(Constants.RIGHT_STICK_USB_PORT);
+  private final XboxController controller  = new XboxController(Constants.CONTROLLER_USB_PORT);
 
-  private final DriveSystem     driveSystem = new DriveSystem();
-  private final GyroPID         gyroPID     = new GyroPID();
-  private final VisionPID       visionPID   = new VisionPID();
-  private final FrontIntake     frontIntake = new FrontIntake();
-  private final Loader          loader      = new Loader();
-  private final Shooter         shooter     = new Shooter();
+  private final DriveSystem    driveSystem = new DriveSystem();
+  private final GyroPID        gyroPID     = new GyroPID();
+  private final VisionPID      visionPID   = new VisionPID();
+  private final FrontIntake    frontIntake = new FrontIntake();
+  private final Loader         loader      = new Loader();
+  private final Shooter        shooter     = new Shooter();
 
   public RobotContainer()
   {
@@ -118,8 +119,23 @@ public class RobotContainer
 
   public Command getAutonomousCommand()
   {
+    double autonStraightSpeed = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
+    double autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
+    double autonAngle = SmartDashboard.getNumber("AutonAngle", 0.0);
+    boolean autonTurn = SmartDashboard.getBoolean("AutonTurn", false);
+
+    gyroPID.resetGyro();
+
     // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);
-    Command autonCommandChoice = new SequentialCommandGroup(new DriveStraight(driveSystem, gyroPID, 0.33, 70, 0.0))/*, new DriveTurn(driveSystem, gyroPID, -90.0), new DriveStraight(driveSystem, gyroPID, 0.5, 50, 0.0))*/;
+    Command autonCommandChoice = (autonTurn) ? new DriveTurn(driveSystem, gyroPID, autonAngle) : new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, autonAngle);
+    
+    autonCommandChoice = new SequentialCommandGroup(
+                          new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 
+                          new DriveTurn(driveSystem, gyroPID, autonAngle),
+                          new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 360));
+                          //  new AwakenTheDragon(frontIntake, loader),
+                          //  new QueueManager(loader));
+                        
     return autonCommandChoice;
   }
 }

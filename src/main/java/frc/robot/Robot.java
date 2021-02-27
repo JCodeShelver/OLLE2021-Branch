@@ -22,6 +22,7 @@ public class Robot extends TimedRobot
   {
     // Declare Smart Dashboard entrys on startup
     // Priority Variables
+
     SmartDashboard.putNumber("Gyro Angle", 0.0);
     SmartDashboard.putNumber("Shooter RPM", 0.0);
     SmartDashboard.putNumber("Distance from Target", 0.0);

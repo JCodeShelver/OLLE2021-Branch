@@ -52,7 +52,8 @@ public class DriveTurn extends CommandBase
     // Capture key parameters of turn
     gyroPID.enable();
     gyroPID.setSetpoint(targetAngle);
-    gyroPID.setPvalue(0.009); // Replace with Constants.GYRO_P_VALUE
+    gyroPID.setPvalue(0.005); // Replace with Constants.GYRO_P_VALUE
+    //gyroPID.setIvalue(0.001); 
   }
   
   // ----------------------------------------------------------------------------
@@ -65,11 +66,14 @@ public class DriveTurn extends CommandBase
     {
       // Get motor adjust PID output from gyro
       angleRotateMotorAdjust = gyroPID.getOutput();
+      System.out.println("GYROPID OUTPUT: " + angleRotateMotorAdjust);
 
       // Adjust left/right motor sets to PID output.  Rotate
       // as needed toward target angle
-      left  = (-angleRotateMotorAdjust);
-      right = (+angleRotateMotorAdjust);
+      left  = (+angleRotateMotorAdjust);
+      right = (-angleRotateMotorAdjust);
+      System.out.println("LeftTurnValue: " + left);
+      System.out.println("RightTurnValue: " + right);
 
       driveSystem.rdrive(left, right);
     }

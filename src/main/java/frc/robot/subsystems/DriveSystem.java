@@ -108,8 +108,6 @@ public class DriveSystem extends SubsystemBase
     leftMotor2.set(left);
     rightMotor1.set(right);
     rightMotor2.set(right);
-    System.out.println("Raw Data: " + Math.abs(encoderReading.getSelectedSensorPosition()));
-    System.out.println("Percieved Inches: " + this.getDistanceInches());
   }
   
   // ----------------------------------------------------------------------------

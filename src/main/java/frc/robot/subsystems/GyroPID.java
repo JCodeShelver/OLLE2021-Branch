@@ -70,7 +70,8 @@ public class GyroPID extends PIDSubsystem
 	@Override
 	public double getMeasurement() 
 	{
-		return gyro.getAngle(); 
+		// System.out.println("Gyro Angle: " + gyro.getAngle());
+		return gyro.getAngle();
 	}
 	
 	// --------------------------------------------------------------------------
@@ -100,6 +101,13 @@ public class GyroPID extends PIDSubsystem
 	public void setPvalue(double newP)
 	{
 		getController().setP(newP);
+	}
+
+	// --------------------------------------------------------------------------
+	// Adjusts the Integral value of the PID controller.
+	public void setIvalue(double newI)
+	{
+		getController().setI(newI);
 	}
 
 	// --------------------------------------------------------------------------

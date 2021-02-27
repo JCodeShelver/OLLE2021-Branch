@@ -67,7 +67,8 @@ public class StartTheLauncher extends CommandBase {
     else
       RPM = 3700; // Old value of 3700
 
-    RPM += leftStick.getRawAxis(3) * 200;
+    if (Math.abs(leftStick.getRawAxis(3)) > 0.1)
+      RPM += leftStick.getRawAxis(3) * 200;
 
     shooterSystem.setSetPoint(RPM);
     shooterSystem.spinToSetPoint();

@@ -56,8 +56,13 @@ public class DriveStraight extends CommandBase
     
     // Initialize gyro and encoder sensors
     gyroPID.enable();
-    gyroPID.setSetpoint(targetAngle);
-    gyroPID.setPvalue(0.001);
+
+    if (targetAngle == 360)
+      gyroPID.setSetpoint(gyroPID.getMeasurement());
+    else
+      gyroPID.setSetpoint(targetAngle);
+    
+    gyroPID.setPvalue(0.01);
     
     driveSystem.zeroEncoder();
   }
@@ -73,8 +78,8 @@ public class DriveStraight extends CommandBase
       // Get motor adjustment derived from gyro. This keeps us driving in straight line.
       angleMotorAdjust = gyroPID.getOutput();
       
-      left             = powerLevel - angleMotorAdjust;
-      right            = powerLevel + angleMotorAdjust;
+      left             = powerLevel + angleMotorAdjust;
+      right            = powerLevel - angleMotorAdjust;
       
       // If just starting segment, ramp up gradually (linearly) over time period
       // If within given distance to target, begin ramping speed down linearly.

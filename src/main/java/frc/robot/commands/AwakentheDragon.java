@@ -31,7 +31,11 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public void initialize() 
   {
-
+    if (Constants.currMode == Constants.Mode.AUTONOMOUS)
+    {
+      if (!frontIntake.isOut())
+        frontIntake.move();
+    }
   }
 
   // ----------------------------------------------------------------------------
