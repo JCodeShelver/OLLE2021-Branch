@@ -20,7 +20,7 @@ public class DriveSystem extends SubsystemBase
   private final CANSparkMax rightMotor1, rightMotor2;
   private final TalonSRX    encoderReading;
 
-  private       boolean     linearOn, fullSpeed = true; // Determines driving input mode.
+  private       boolean     linearOn, fullSpeed; // Determines driving input mode.
 
   private       double      adjustedLeft, adjustedRight;
   
@@ -35,6 +35,9 @@ public class DriveSystem extends SubsystemBase
     
     encoderReading = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID);
     this.zeroEncoder();
+
+    linearOn  = false;
+    fullSpeed = true;
 
     leftMotor1.setInverted(false);
     leftMotor2.setInverted(false);
@@ -60,19 +63,19 @@ public class DriveSystem extends SubsystemBase
   // Manipulates the input based on speed and scaling vars, then returns an array.
   public double[] manipInput(double left, double right)
   {
-    if (linearOn)
-    {
-      if (!(Math.abs(left) < 0.1))
-        left = 0.0;
+    if (Math.abs(left) < 0.1)
+      left = 0.0;
+  
+    if (Math.abs(right) < 0.1)
+      right = 0.0;
     
-      if (!(Math.abs(right) < 0.1))
-        right = 0.0;
-      
+    if (linearOn)
+    {  
       adjustedLeft  = left;
       adjustedRight = right;
     } else {
-        adjustedLeft  = left  * Math.abs(left);
-        adjustedRight = right * Math.abs(right);
+      adjustedLeft  = left  * Math.abs(left);
+      adjustedRight = right * Math.abs(right);
     }
 
     if (!fullSpeed)

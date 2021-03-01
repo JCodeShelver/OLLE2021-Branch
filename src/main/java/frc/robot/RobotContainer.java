@@ -101,8 +101,8 @@ public class RobotContainer
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
     // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
-    new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
-    new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
+    // new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
+    // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
     new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.

@@ -55,9 +55,10 @@ public class VisionPID extends PIDSubsystem
 	@Override
 	public double getMeasurement() 
 	{
-		tx = table.getEntry("tx");
+		tx       = table.getEntry("tx");
 		double x = tx.getDouble(0.0);
-		return x;
+    
+    return x;
 	}
 
 	// --------------------------------------------------------------------------
@@ -78,22 +79,23 @@ public class VisionPID extends PIDSubsystem
 	// Return whether the target is in view or not.
 	public boolean getTargetInView()
 	{
-		ta = table.getEntry("ta");
+		ta       = table.getEntry("ta");
 		double a = ta.getDouble(0.0);
-		return (a > 0);
+    
+    return (a > 0);
 	}
 
 	// --------------------------------------------------------------------------
 	// Return the Limelight's Vision variables.
 	public void getVisionData()
 	{
-		tx = table.getEntry("tx");
+		tx       = table.getEntry("tx");
 		double x = tx.getDouble(0.0);
 
-		ty = table.getEntry("ty");
+		ty       = table.getEntry("ty");
 		double y = ty.getDouble(0.0);
 		
-		ta = table.getEntry("ta");
+		ta       = table.getEntry("ta");
 		double a = ta.getDouble(0.0);
 
 		SmartDashboard.putNumber("Vision X", x);

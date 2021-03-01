@@ -126,8 +126,11 @@ public class Shooter extends SubsystemBase
     // if (self.getCanShoot())
     // {
       ShootingPiston.set(DoubleSolenoid.Value.kReverse);
+      
+      if (shooterPistonDown)
+        Constants.ballsControlled --;
+      
       shooterPistonDown = false;
-      Constants.ballsControlled --;
     // }
 
     if (Constants.ballsControlled < 0)
