@@ -57,6 +57,7 @@ public class DriveStraight extends CommandBase
     // Initialize gyro and encoder sensors
     gyroPID.enable();
 
+    // So if we input 360°, then just go straight relative to current angle.
     if (targetAngle == 360)
       gyroPID.setSetpoint(gyroPID.getMeasurement());
     else

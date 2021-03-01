@@ -119,11 +119,12 @@ public class RobotContainer
 
   public Command getAutonomousCommand()
   {
-    double autonStraightSpeed = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
-    double autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
-    double autonAngle = SmartDashboard.getNumber("AutonAngle", 0.0);
-    boolean autonTurn = SmartDashboard.getBoolean("AutonTurn", false);
+    boolean autonTurn           = SmartDashboard.getBoolean("AutonTurn", false);
+    double  autonAngle          = SmartDashboard.getNumber("AutonAngle", 0.0);
+    double  autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
+    double  autonStraightSpeed  = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
 
+    // Zero Gyro here, in case it didn't zero on redeploy of code.
     gyroPID.resetGyro();
 
     // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);

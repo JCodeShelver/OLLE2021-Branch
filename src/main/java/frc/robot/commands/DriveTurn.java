@@ -68,10 +68,11 @@ public class DriveTurn extends CommandBase
       angleRotateMotorAdjust = gyroPID.getOutput();
       System.out.println("GYROPID OUTPUT: " + angleRotateMotorAdjust);
 
-      // Adjust left/right motor sets to PID output.  Rotate
-      // as needed toward target angle
+      // Adjust left/right motor sets to PID output.  Rotate as needed toward 
+      // target angle.
       left  = (+angleRotateMotorAdjust);
       right = (-angleRotateMotorAdjust);
+      
       System.out.println("LeftTurnValue: " + left);
       System.out.println("RightTurnValue: " + right);
 
