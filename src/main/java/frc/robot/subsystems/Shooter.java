@@ -127,6 +127,8 @@ public class Shooter extends SubsystemBase
     // {
       ShootingPiston.set(DoubleSolenoid.Value.kReverse);
       
+      // This means that when we press the button, we only deincrement the count
+      // the first time through the method.
       if (shooterPistonDown)
         Constants.ballsControlled --;
       

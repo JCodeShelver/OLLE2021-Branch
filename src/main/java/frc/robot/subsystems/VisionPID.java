@@ -90,14 +90,13 @@ public class VisionPID extends PIDSubsystem
 	public void getVisionData()
 	{
 		tx       = table.getEntry("tx");
-		double x = tx.getDouble(0.0);
-
 		ty       = table.getEntry("ty");
-		double y = ty.getDouble(0.0);
-		
 		ta       = table.getEntry("ta");
+		
+		double x = tx.getDouble(0.0);
+		double y = ty.getDouble(0.0);
 		double a = ta.getDouble(0.0);
-
+		
 		SmartDashboard.putNumber("Vision X", x);
 		SmartDashboard.putNumber("Vision Y", y);
 		SmartDashboard.putNumber("Vision Area", a);
