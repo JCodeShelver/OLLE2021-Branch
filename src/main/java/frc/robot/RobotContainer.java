@@ -8,8 +8,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.commands.*;
@@ -101,14 +101,15 @@ public class RobotContainer
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
     // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
-    // new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
-    // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
+     new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
+     new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
     new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.
+    // Controller B is reserved and used in QueueManager. DO NOT BIND IT HERE!
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
-
+    
     // Stop values include:
     // () -> loader.stop() (if you configure it as hybrid operated and not default like it is.)
     // () -> frontIntake.stop()

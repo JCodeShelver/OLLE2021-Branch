@@ -129,7 +129,7 @@ public class VisionPID extends PIDSubsystem
 	@Override
 	public void useOutput(double output, double setpoint)
 	{
-		currentSetpoint  = setpoint;
-		pidOutput        = output;
+		currentSetpoint = setpoint;
+		pidOutput       = output;
 	}
 }

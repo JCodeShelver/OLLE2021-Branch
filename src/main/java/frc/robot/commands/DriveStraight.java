@@ -87,14 +87,14 @@ public class DriveStraight extends CommandBase
       if (segmentDriveTimer.get() < Constants.RAMP_UP_TIME)               // Handle gradual ramp down
       {
         percentage = segmentDriveTimer.get() / Constants.RAMP_UP_TIME;
-        left       = percentage * left;
-        right      = percentage * right;
+        left      *= percentage;
+        right     *= percentage;
       }   
       else if (targetDistance - driveSystem.getDistanceInches() <= Constants.RAMP_DOWN_DIST)  // Handle gradual ramp down
       {
         percentage = (targetDistance - driveSystem.getDistanceInches()) / Constants.RAMP_DOWN_DIST;
-        left       = percentage * left;
-        right      = percentage * right;
+        left      *= percentage;
+        right     *= percentage;
       }
 
       driveSystem.rdrive(left, right);

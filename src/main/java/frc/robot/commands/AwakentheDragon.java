@@ -31,6 +31,7 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public void initialize() 
   {
+    // Make sure the front intake is down in Auton.
     if (Constants.currMode == Constants.Mode.AUTONOMOUS)
     {
       if (!frontIntake.isOut())

@@ -149,12 +149,9 @@ public class Auton extends CommandBase
   // 
   @Override
   public void initialize() 
-  {
-    // Make sure we deploy the front Intake 
-    if (!frontIntake.isOut())
-      frontIntake.move();
-    
+  { 
     new AwakenTheDragon(frontIntake, loader);
+    // Make some command to drive forward until ball picked up.
   }
 
   // ----------------------------------------------------------------------------

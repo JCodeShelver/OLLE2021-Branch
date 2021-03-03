@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Import Constants
@@ -15,14 +16,16 @@ import frc.robot.subsystems.Loader;
 
 public class QueueManager extends CommandBase 
 {
-  private final Loader  loader;
+  private final Loader         loader;
 
-  private       boolean ballWaiting/*, isDone*/;
-  private       int     ballsInQueue;
+  private final XboxController controller = new XboxController(Constants.CONTROLLER_USB_PORT);
+
+  private       boolean        ballWaiting/*, isDone*/;
+  private       int            ballsInQueue;
   
   public QueueManager(Loader l)
   {
-    loader  = l;
+    loader = l;
 
     addRequirements(loader);
   }
@@ -60,35 +63,39 @@ public class QueueManager extends CommandBase
     // SmartDashboard.putString("DB/String 2", "Balls In System: " + Constants.ballsControlled);
     SmartDashboard.putNumber("Balls In System", ballsInQueue);
     SmartDashboard.putNumber("Balls Controlled", Constants.ballsControlled);
-     // Logic for Belt Movement
-
-    // First, is there a ball that can be loaded into the shooter?
-    if (ballWaiting && !Constants.ballInShooter)
-    {
-      // Turn the STSMotor on and the Queue Motor on. 
-      loader.LoadBallMotorOn();
-      loader.QueueMotorOn(0.5);
-    }
-    // If there isn't, but there is a ball waiting to be loaded, we are compacted.
-    else if (ballWaiting)
-    {
-      loader.QueueMotorOff();
-      //loader.LoadBallMotorOff();
-      // isDone = true;
-    }
-    // If the shooter is active, then start moving the queue.
-    else if (Constants.shooterSystemActive)
-      loader.QueueMotorOn(0.5);
-    else if (ballsInQueue == 0)
-      loader.QueueMotorOff();
-    // If there is a ball just picked up, then move it.
-    else if (ballsInQueue > 0)
-      loader.QueueMotorOn(0.5);
+    // Logic for Belt Movement
     
-    // Once the ball reaches the shooter, shut off the STSmotor.
-    if (Constants.ballInShooter)
-      loader.LoadBallMotorOff();
-    
+    if (controller.getBButton())
+      loader.QueueMotorOn(-0.33);
+    else
+    {    
+      // First, is there a ball that can be loaded into the shooter?
+      if (ballWaiting && !Constants.ballInShooter)
+      {
+        // Turn the STSMotor on and the Queue Motor on. 
+        loader.LoadBallMotorOn();
+        loader.QueueMotorOn(0.5);
+      }
+      // If there isn't, but there is a ball waiting to be loaded, we are compacted.
+      else if (ballWaiting)
+      {
+        loader.QueueMotorOff();
+        //loader.LoadBallMotorOff();
+        // isDone = true;
+      }
+      // If the shooter is active, then start moving the queue.
+      else if (Constants.shooterSystemActive)
+        loader.QueueMotorOn(0.5);
+      else if (ballsInQueue == 0)
+        loader.QueueMotorOff();
+      // If there is a ball just picked up, then move it.
+      else if (ballsInQueue > 0)
+        loader.QueueMotorOn(0.5);
+      
+      // Once the ball reaches the shooter, shut off the STSmotor.
+      if (Constants.ballInShooter)
+        loader.LoadBallMotorOff();
+    }  
     // Did we interrupt this by pressing LB?
     // if (loader.getStop())
     // {

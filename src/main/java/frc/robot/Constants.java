@@ -77,8 +77,14 @@ public final class Constants
     
     public static enum  Mode    {AUTONOMOUS, TELEOP, TEST, DISABLED};
     public static       Mode    currMode;
-    public static       int     ballsControlled                   = 0;
-    public static       boolean ballInShooter                     = false;
-    public static       boolean ballCaught                        = false;
-    public static       boolean shooterSystemActive               = false;
+
+    public static       int     ballsControlled     = 0;
+    
+    public static       boolean ballInShooter       = false;
+    public static       boolean ballCaught          = false;
+    public static       boolean shooterSystemActive = false;
+
+    // --------------------------------------------------------------------------
+    // Auton Vars
+    public static       int     GSCPath             = 0;                       
 }

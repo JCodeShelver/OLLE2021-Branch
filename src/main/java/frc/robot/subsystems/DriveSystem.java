@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -36,6 +37,11 @@ public class DriveSystem extends SubsystemBase
     encoderReading = new TalonSRX(Constants.MOVING_MOTOR_CAN_ID);
     this.zeroEncoder();
 
+    leftMotor1.setIdleMode(IdleMode.kBrake);
+    leftMotor2.setIdleMode(IdleMode.kBrake);
+    rightMotor1.setIdleMode(IdleMode.kBrake);
+    rightMotor2.setIdleMode(IdleMode.kBrake);
+    
     linearOn  = false;
     fullSpeed = true;
 
