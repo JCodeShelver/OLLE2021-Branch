@@ -20,7 +20,7 @@ public class QueueManager extends CommandBase
 
   private final XboxController controller = new XboxController(Constants.CONTROLLER_USB_PORT);
 
-  private       boolean        ballWaiting/*, isDone*/;
+  /* private     boolean        isDone; */
   private       int            ballsInQueue;
   
   public QueueManager(Loader l)
@@ -35,8 +35,7 @@ public class QueueManager extends CommandBase
   @Override
   public void initialize() 
   { 
-    ballWaiting   = false;
-    // isDone        = false;
+    // isDone   = false;
   }
 
   // ----------------------------------------------------------------------------
@@ -47,6 +46,9 @@ public class QueueManager extends CommandBase
   @Override
   public void execute()
   { 
+    Constants.ballAtIntake = loader.ballAtIntake();
+    Constants.ballWaiting  = loader.ballWaiting();
+
     /* The running tally of balls doesn't matter to us in this command. In this command,
        we only need the number of balls in the Queue. If there is a ball in the shooter,
        we ignore it, if there's not, then we don't.
@@ -57,7 +59,6 @@ public class QueueManager extends CommandBase
       ballsInQueue = 0;
 
     // Set local variables to reduce usage of loader subsystem methods and for readablity.
-    ballWaiting  = (loader.ballWaiting());  // Ball Waiting next to the shooter
     
     // SmartDashboard.putString("DB/String 1", "Balls In Queue: " + ballsInQueue);
     // SmartDashboard.putString("DB/String 2", "Balls In System: " + Constants.ballsControlled);
@@ -68,16 +69,16 @@ public class QueueManager extends CommandBase
     if (controller.getBButton())
       loader.QueueMotorOn(-0.33);
     else
-    {    
+    { 
       // First, is there a ball that can be loaded into the shooter?
-      if (ballWaiting && !Constants.ballInShooter)
+      if (Constants.ballWaiting && !Constants.ballInShooter)
       {
         // Turn the STSMotor on and the Queue Motor on. 
         loader.LoadBallMotorOn();
         loader.QueueMotorOn(0.5);
       }
       // If there isn't, but there is a ball waiting to be loaded, we are compacted.
-      else if (ballWaiting)
+      else if (Constants.ballWaiting)
       {
         loader.QueueMotorOff();
         //loader.LoadBallMotorOff();

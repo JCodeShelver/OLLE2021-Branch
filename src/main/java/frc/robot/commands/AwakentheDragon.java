@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Import Constants
@@ -11,19 +12,16 @@ import frc.robot.Constants;
 
 // Import Subsystems
 import frc.robot.subsystems.FrontIntake;
-import frc.robot.subsystems.Loader;
 
 public class AwakenTheDragon extends CommandBase 
 {
   private final FrontIntake frontIntake;
-  private final Loader      loader;
 
-  public AwakenTheDragon(FrontIntake f, Loader l)
+  public AwakenTheDragon(FrontIntake f)
   {
     frontIntake = f;
-    loader      = l;
 
-    addRequirements(frontIntake, loader);
+    addRequirements(frontIntake);
   }
 
   // ----------------------------------------------------------------------------
@@ -43,11 +41,9 @@ public class AwakenTheDragon extends CommandBase
   // Runs the front intake until a ball is picked up.
   @Override
   public void execute()
-  { 
-    if (frontIntake.isOut() && !frontIntake.isDisabled() && !loader.ballAtIntake())
+  {    
+    if (frontIntake.isOut() && !frontIntake.isDisabled())
       frontIntake.drive(0.75);
-    else
-      frontIntake.drive(0.0);
   }
 
   // ----------------------------------------------------------------------------
@@ -61,26 +57,35 @@ public class AwakenTheDragon extends CommandBase
       return true;
     }
     // Moved to entrance of conveyor
-    else if (loader.ballAtIntake() && !Constants.ballCaught)
+    else if (Constants.ballAtIntake && !Constants.ballCaught)
     {
       Constants.ballsControlled ++;
       
-      if (Constants.currMode == Constants.Mode.TELEOP)
-        return true;
-      else {
-        Constants.ballCaught = true;
-        return false;
-      }
+      if (Constants.ballsControlled >= 3)
+        Constants.ballsControlled = 3;
+      
+      Constants.ballCaught = true;
+      SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
+
+      return false;
     }
     // Picked up by conveyor
-    else if (!loader.ballAtIntake() && Constants.ballCaught)
+    else if (!Constants.ballAtIntake && Constants.ballCaught)
     {
       Constants.ballCaught = false;
+      SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
       
-      frontIntake.drive(0.0);
-      
-      return (Constants.ballsControlled == 3);
+      return (Constants.ballsControlled >= 3);
     } else 
       return false;
+  }
+
+  @Override
+  public void end(boolean interrupted)
+  {
+    frontIntake.drive(0.0);
+
+    if (Constants.currMode == Constants.Mode.AUTONOMOUS)
+      frontIntake.move();
   }
 }

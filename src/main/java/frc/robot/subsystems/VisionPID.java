@@ -55,7 +55,8 @@ public class VisionPID extends PIDSubsystem
 	@Override
 	public double getMeasurement() 
 	{
-		tx       = table.getEntry("tx");
+    tx       = table.getEntry("tx");
+    
 		double x = tx.getDouble(0.0);
     
     return x;
@@ -79,7 +80,8 @@ public class VisionPID extends PIDSubsystem
 	// Return whether the target is in view or not.
 	public boolean getTargetInView()
 	{
-		ta       = table.getEntry("ta");
+    ta       = table.getEntry("ta");
+    
 		double a = ta.getDouble(0.0);
     
     return (a > 0);

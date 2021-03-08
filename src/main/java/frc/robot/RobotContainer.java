@@ -105,7 +105,7 @@ public class RobotContainer
      new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
-    new JoystickButton(controller, XboxController.Button.kA.value).whenPressed(new AwakenTheDragon(frontIntake, loader)); // Start Front Intake.
+    new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake)); // Start Front Intake.
     // Controller B is reserved and used in QueueManager. DO NOT BIND IT HERE!
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
@@ -128,7 +128,7 @@ public class RobotContainer
     // Zero Gyro here, in case it didn't zero on redeploy of code.
     gyroPID.resetGyro();
 
-    // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader);
+    // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader, gyroPID);
     Command autonCommandChoice = (autonTurn) ? new DriveTurn(driveSystem, gyroPID, autonAngle) : new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, autonAngle);
     
     autonCommandChoice = new SequentialCommandGroup(

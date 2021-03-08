@@ -79,12 +79,21 @@ public final class Constants
     public static       Mode    currMode;
 
     public static       int     ballsControlled     = 0;
+    public static       boolean ballCaught          = false;
+    
+    public static       boolean ballAtIntake        = false;
+    public static       boolean ballWaiting         = false;
     
     public static       boolean ballInShooter       = false;
-    public static       boolean ballCaught          = false;
     public static       boolean shooterSystemActive = false;
 
     // --------------------------------------------------------------------------
     // Auton Vars
     public static       int     GSCPath             = 0;                       
-}
+    /*
+      1: A-Red
+      2: A-Blue
+      3: B-Red
+      4: B-Blue
+    */
+  }

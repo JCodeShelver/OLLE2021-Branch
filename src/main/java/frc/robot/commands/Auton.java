@@ -123,26 +123,30 @@ B-Blue: 30
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import frc.robot.Constants;
 // Import Subsystems
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FrontIntake;
+import frc.robot.subsystems.GyroPID;
 import frc.robot.subsystems.Loader;
 
 public class Auton extends CommandBase
 {
   private final DriveSystem driveSystem;
   private final FrontIntake frontIntake;
+  private final GyroPID     gyroPID;
   private final Loader      loader;
   
-  public Auton(DriveSystem d, FrontIntake f, Loader l)
+  public Auton(DriveSystem d, FrontIntake f, GyroPID g, Loader l)
   {
     driveSystem = d;
     frontIntake = f;
+    gyroPID     = g;
     loader      = l;
 
-    addRequirements(driveSystem, frontIntake, loader);
+    addRequirements(driveSystem, frontIntake, gyroPID, loader);
   }
 
 	// ----------------------------------------------------------------------------
@@ -150,7 +154,8 @@ public class Auton extends CommandBase
   @Override
   public void initialize() 
   { 
-    new AwakenTheDragon(frontIntake, loader);
+    new ParallelCommandGroup(new AwakenTheDragon(frontIntake), 
+                             new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0));
     // Make some command to drive forward until ball picked up.
   }
 
@@ -159,7 +164,15 @@ public class Auton extends CommandBase
   @Override
   public void execute()
   {
+    // If we just caught the first ball:
+    if (Constants.ballsControlled == 1)
+    {
+      Constants.GSCPath = 1;
+    }
+    else
+    {
 
+    }
   }
 
   // ----------------------------------------------------------------------------
