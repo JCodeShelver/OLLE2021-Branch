@@ -152,7 +152,7 @@ public class Auton extends CommandBase
     loader      = l;
 
     delayTime   = 3.0;
-    iteration   = 0;
+    iteration   = -1;
 
     addRequirements(driveSystem, frontIntake, gyroPID, loader);
   }
@@ -167,11 +167,8 @@ public class Auton extends CommandBase
   public void initialize() 
   { 
     driveSystem.zeroEncoder();
-
-    // Start by driving 60 inches (actually 57ish) for opening segment.
-    new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0);
   }
-
+  
   // ----------------------------------------------------------------------------
   // Called after the first 60 inches are driven and then does fancy stuff for 
   // the rest of Auton GSC.
@@ -179,166 +176,176 @@ public class Auton extends CommandBase
   public void execute()
   {
     iteration ++;
-
-    if (Constants.GSCPath == 0)
+    
+    if (iteration == 0)
     {
-      // So we haven't picked  upany balls yet.
-      if (Constants.ballsControlled == 0)
-      { 
-        // Go some more distance depending on which iteration of the loop we're on.
-        switch (iteration)
-        {
-          // So we drove the first leg and didn't get a ball? Try the next stop.
-          case 1:
-            new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(5)) - 60, 0.0);
-            break;
-          // That didn't work? Oh well then. Try driving to the third possible first
-          // stop.
-          case 2:
-            new DriveStraight(driveSystem, gyroPID, 0.33, 150.0 - (30.0 * Math.sqrt(5)), 0.0);
-            break;
-          // Harrumph. Go to the last stop then. Be that way.
-          case 3:
-            new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(26)) - 150.0, 0.0);
-            break;
-        }
-
-        // After we drive to our next stop, wait so that we can pick up a ball if 
-        // one is present.
-        new WaitCommand(delayTime);
-      }
-      // If we just caught the first ball ()
-      else if (Constants.ballsControlled == 1)
-      {
-        // First ball caught? Set our GSCPath variable.
-        // B-red is 1, A-Red is 2, B-Blue is 3, A-Blue is 4.
-        Constants.GSCPath = iteration;
-      }
+      // Start by driving 60 inches (actually 57ish) for opening segment.
+      new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0);
+      new WaitCommand(delayTime);
     }
     else
     {
-      // When we have a set path, run set code for the iteration.
-      switch (Constants.GSCPath)
+      // We don't know our path yet.
+      if (Constants.GSCPath == 0)
       {
-        // B-Red
-        case 1:
-        {
-          /*
-            The iteration var and GSCPath var get unsynced once
-            GSCPath is defined, as we have to go through the 
-            entire execute block again.
-          */
-          switch (iteration - 1)
+        // So we haven't picked  up any balls yet.
+        if (Constants.ballsControlled == 0)
+        { 
+          // Go some more distance depending on which iteration of the loop we're on.
+          switch (iteration)
           {
+            // So we drove the first leg and didn't get a ball? Try the next stop.
             case 1:
-            {
-              // B-Red second stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 45.0);
-              new WaitCommand(delayTime);
+              new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(5)) - 60, 0.0);
               break;
-            }
+            // That didn't work? Oh well then. Try driving to the third possible first
+            // stop.
             case 2:
-            {
-              // B-Red third stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -90.0);
-              new WaitCommand(delayTime);
+              new DriveStraight(driveSystem, gyroPID, 0.33, 150.0 - (30.0 * Math.sqrt(5)), 0.0);
               break;
-            }
+            // Harrumph. Go to the last stop then. Be that way.
             case 3:
-            {
-              // B-Red final stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 120.0, 45.0);
+              new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(26)) - 150.0, 0.0);
               break;
-            }
           }
-          break;
+
+          // After we drive to our next stop, wait so that we can pick up a ball if 
+          // one is present.
+          new WaitCommand(delayTime);
         }
-        // A-Red
-        case 2:
+        // If we just caught the first ball ()
+        else if (Constants.ballsControlled == 1)
         {
-          switch (iteration - 1)
-          {
-            case 1:
-            {
-              // A-Red second stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 0.0);
-              new WaitCommand(delayTime);
-              break;
-            }
-            case 2:
-            {
-              // A-Red third stint.
-              new DriveTurn(driveSystem, gyroPID, -Math.toDegrees(Math.atan(0.5) + Math.atan(3)));
-              new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0);
-              new WaitCommand(delayTime);
-              break;
-            }
-            case 3:
-            {
-              // A-Red final stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 150.0, Math.toDegrees(Math.atan(3)));
-              break;
-            }
-          }
-          break;
+          // First ball caught? Set our GSCPath variable.
+          // B-red is 1, A-Red is 2, B-Blue is 3, A-Blue is 4.
+          Constants.GSCPath = iteration;
         }
-        // B-Blue
-        case 3:
+      }
+      else
+      {
+        // When we have a set path, run set code for the iteration.
+        switch (Constants.GSCPath)
         {
-          switch (iteration - 1)
+          // B-Red
+          case 1:
           {
-            case 1:
+            /*
+              The iteration var and GSCPath var get unsynced once
+              GSCPath is defined, as we have to go through the 
+              entire execute block again.
+            */
+            switch (iteration - 1)
             {
-              // B-Blue second stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -45.0);
-              new WaitCommand(delayTime);
-              break;
+              case 1:
+              {
+                // B-Red second stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 45.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 2:
+              {
+                // B-Red third stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -90.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 3:
+              {
+                // B-Red final stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 120.0, 45.0);
+                break;
+              }
             }
-            case 2:
-            {
-              // B-Blue third stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 90.0);
-              new WaitCommand(delayTime);
-              break;
-            }
-            case 3:
-            {
-              // B-Blue final stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 30.0, -45.0);
-              break;
-            }
+            break;
           }
-          break;
-        }
-        // A-Blue
-        case 4:
-        {
-          switch (iteration - 1)
+          // A-Red
+          case 2:
           {
-            case 1:
+            switch (iteration - 1)
             {
-              // A-Blue second stint.
-              new DriveTurn(driveSystem, gyroPID, -Math.toDegrees(Math.atan(0.2) + Math.atan(3)));
-              new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0);
-              new WaitCommand(delayTime);
-              break;
+              case 1:
+              {
+                // A-Red second stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 0.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 2:
+              {
+                // A-Red third stint.
+                new DriveTurn(driveSystem, gyroPID, -Math.toDegrees(Math.atan(0.5) + Math.atan(3)));
+                new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 3:
+              {
+                // A-Red final stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 150.0, Math.toDegrees(Math.atan(3)));
+                break;
+              }
             }
-            case 2:
-            {
-              // A-Blue third stint.
-              new DriveTurn(driveSystem, gyroPID, Math.toDegrees(Math.atan(0.5) + Math.atan(3)));
-              new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 360.0);
-              new WaitCommand(delayTime);
-              break;
-            }
-            case 3:
-            {
-              // A-Blue final stint.
-              new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, -Math.toDegrees(Math.atan(0.5)));
-              break;
-            }
+            break;
           }
-          break;
+          // B-Blue
+          case 3:
+          {
+            switch (iteration - 1)
+            {
+              case 1:
+              {
+                // B-Blue second stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -45.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 2:
+              {
+                // B-Blue third stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 90.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 3:
+              {
+                // B-Blue final stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 30.0, -45.0);
+                break;
+              }
+            }
+            break;
+          }
+          // A-Blue
+          case 4:
+          {
+            switch (iteration - 1)
+            {
+              case 1:
+              {
+                // A-Blue second stint.
+                new DriveTurn(driveSystem, gyroPID, -Math.toDegrees(Math.atan(0.2) + Math.atan(3)));
+                new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 2:
+              {
+                // A-Blue third stint.
+                new DriveTurn(driveSystem, gyroPID, Math.toDegrees(Math.atan(0.5) + Math.atan(3)));
+                new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 360.0);
+                new WaitCommand(delayTime);
+                break;
+              }
+              case 3:
+              {
+                // A-Blue final stint.
+                new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, -Math.toDegrees(Math.atan(0.5)));
+                break;
+              }
+            }
+            break;
+          }
         }
       }
     }

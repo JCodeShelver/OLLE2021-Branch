@@ -48,6 +48,9 @@ public class QueueManager extends CommandBase
     Constants.ballAtIntake = loader.ballAtIntake();
     Constants.ballWaiting  = loader.ballWaiting();
 
+    SmartDashboard.putBoolean("Ball at Intake", Constants.ballAtIntake);
+    SmartDashboard.putBoolean("Ball Waiting", Constants.ballWaiting);
+
     /* 
       The running tally of balls doesn't matter to us in this command. In this command,
       we only need the number of balls in the Queue. If there is a ball in the shooter,

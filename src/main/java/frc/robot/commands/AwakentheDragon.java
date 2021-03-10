@@ -43,6 +43,8 @@ public class AwakenTheDragon extends CommandBase
 
     // If we didn't make it false before, make sure it's supposed to be true now.
     Constants.ballCaught = Constants.ballAtIntake;
+
+    SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
   }
 
   // ----------------------------------------------------------------------------
@@ -61,6 +63,7 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public boolean isFinished() 
   {
+    // If it's not deployed:
     if (!frontIntake.isOut())
     {
       frontIntake.stop();
