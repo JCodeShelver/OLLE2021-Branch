@@ -108,6 +108,7 @@ public class Loader extends SubsystemBase
   {
     Constants.ballsControlled ++;
     
+    // Prevent overflowing.
     if (Constants.ballsControlled > 3)
       Constants.ballsControlled = 3;
   }
@@ -119,6 +120,7 @@ public class Loader extends SubsystemBase
   {
     Constants.ballsControlled --;
     
+    // Prevent underflowing.
     if (Constants.ballsControlled < 0)
       Constants.ballsControlled = 0;
     

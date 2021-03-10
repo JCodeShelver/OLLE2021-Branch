@@ -21,7 +21,7 @@ public class FrontIntake extends SubsystemBase
   private final TalonSRX       intakeMotor, STSMotor;
  
   // Indicates if the Intake is deployed.
-  private       boolean        isOut, isDisabled = false;
+  private       boolean        isOut = false;
 
   // ----------------------------------------------------------------------------
   // Constructor
@@ -43,12 +43,10 @@ public class FrontIntake extends SubsystemBase
 
   // ----------------------------------------------------------------------------
   // Stops the intake motors.
-  public void mstop()
+  public void stop()
   {
     intakeMotor.set(ControlMode.PercentOutput, 0);
     STSMotor.set(ControlMode.PercentOutput, 0);
-    
-    isDisabled = !isDisabled;
   }
 
   // ----------------------------------------------------------------------------
@@ -56,13 +54,6 @@ public class FrontIntake extends SubsystemBase
   public boolean isOut()
   {
     return isOut;
-  }
-  
-  // ----------------------------------------------------------------------------
-  // Returns if the Front Intake motors have been forcibly stopped.
-  public boolean isDisabled()
-  {
-    return isDisabled;
   }
   
   // ----------------------------------------------------------------------------

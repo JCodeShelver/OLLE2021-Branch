@@ -101,8 +101,8 @@ public class RobotContainer
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
     // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
-     new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
-     new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
+    new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
+    new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
     new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake)); // Start Front Intake.
@@ -115,9 +115,10 @@ public class RobotContainer
     // () -> frontIntake.stop()
     // () -> shooter.stop()
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop());    
-    new JoystickButton(controller, XboxController.Button.kBumperRight.value).whenPressed(() -> frontIntake.mstop());   
   }
 
+  // ----------------------------------------------------------------------------
+  // This is our Auton Command.
   public Command getAutonomousCommand()
   {
     boolean autonTurn           = SmartDashboard.getBoolean("AutonTurn", false);
@@ -128,7 +129,7 @@ public class RobotContainer
     // Zero Gyro here, in case it didn't zero on redeploy of code.
     gyroPID.resetGyro();
 
-    // Command autonCommandChoice = new Auton(driveSystem, frontIntake, loader, gyroPID);
+    // Command autonCommandChoice = new ParallelDeadlineGroup(new AwakenTheDragon(frontIntake), new QueueManager(loader), Auton(driveSystem, frontIntake, loader, gyroPID);
     Command autonCommandChoice = (autonTurn) ? new DriveTurn(driveSystem, gyroPID, autonAngle) : new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, autonAngle);
     
     autonCommandChoice = new SequentialCommandGroup(

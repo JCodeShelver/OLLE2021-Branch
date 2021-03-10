@@ -35,6 +35,14 @@ public class AwakenTheDragon extends CommandBase
       if (!frontIntake.isOut())
         frontIntake.move();
     }
+
+    // Check that when we start this, we didn't just have Aerial spamming the A
+    // button a lot.
+    if (Constants.ballCaught && !Constants.ballAtIntake) 
+      Constants.ballCaught = false;
+
+    // If we didn't make it false before, make sure it's supposed to be true now.
+    Constants.ballCaught = Constants.ballAtIntake;
   }
 
   // ----------------------------------------------------------------------------
@@ -42,8 +50,10 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public void execute()
   {    
-    if (frontIntake.isOut() && !frontIntake.isDisabled())
+    if (frontIntake.isOut())
       frontIntake.drive(0.75);
+    else
+      frontIntake.drive(0.0);
   }
 
   // ----------------------------------------------------------------------------
@@ -51,35 +61,41 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public boolean isFinished() 
   {
-    if (!frontIntake.isOut() || frontIntake.isDisabled())
+    if (!frontIntake.isOut())
     {
-      frontIntake.mstop();
+      frontIntake.stop();
       return true;
     }
-    // Moved to entrance of conveyor
+    // Moved to entrance of conveyor (ball present and this is first time through)
     else if (Constants.ballAtIntake && !Constants.ballCaught)
     {
       Constants.ballsControlled ++;
       
+      // Just to make sure we don't go past 3.
       if (Constants.ballsControlled >= 3)
         Constants.ballsControlled = 3;
       
+      // Set our memory variable to true. "We caught a ball!"
       Constants.ballCaught = true;
       SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
-
+      
       return false;
     }
-    // Picked up by conveyor
+    // Picked up by conveyor and moved along.
     else if (!Constants.ballAtIntake && Constants.ballCaught)
-    {
+    { 
+      // Reset our memory variable. "We moved the ball!"
       Constants.ballCaught = false;
       SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
       
+      // Stop when we get 3 balls.
       return (Constants.ballsControlled >= 3);
     } else 
       return false;
   }
 
+  // ----------------------------------------------------------------------------
+  // Whenever we end this command, stop the motors.
   @Override
   public void end(boolean interrupted)
   {
