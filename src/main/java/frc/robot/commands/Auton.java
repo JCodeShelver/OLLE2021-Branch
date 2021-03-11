@@ -122,9 +122,10 @@ B-Blue: 30
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 // Import Constants
 import frc.robot.Constants;
 
@@ -140,6 +141,8 @@ public class Auton extends CommandBase
   private final FrontIntake frontIntake;
   private final GyroPID     gyroPID;
   private final Loader      loader;
+
+  private       Command     currCommand;
 
   private       double      delayTime;
   private       int         iteration;
@@ -180,7 +183,8 @@ public class Auton extends CommandBase
     if (iteration == 0)
     {
       // Start by driving 60 inches (actually 57ish) for opening segment.
-      new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0);
+      currCommand = new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0);
+      currCommand.schedule();
       new WaitCommand(delayTime);
     }
     else
