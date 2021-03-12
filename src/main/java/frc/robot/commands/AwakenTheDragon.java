@@ -93,7 +93,8 @@ public class AwakenTheDragon extends CommandBase
       
       // Stop when we get 3 balls.
       return (Constants.ballsControlled >= 3);
-    } else 
+    }
+    else 
       return false;
   }
 

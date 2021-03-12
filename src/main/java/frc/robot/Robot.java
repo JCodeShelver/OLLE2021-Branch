@@ -40,6 +40,10 @@ public class Robot extends TimedRobot
     CameraServer.getInstance().startAutomaticCapture();
     CameraServer.getInstance().startAutomaticCapture();
 
+    // Allow user to specify starting number of balls.
+    if (SmartDashboard.getNumber("Balls Controlled", 0.0) != 0.0)
+      Constants.ballsControlled = (int) SmartDashboard.getNumber("Balls Controlled", 0.0);
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -47,6 +51,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     CommandScheduler.getInstance().run();
+
     CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initializing: " + command.getName()));
     CommandScheduler.getInstance().onCommandExecute(command -> System.out.println("Command Executing: " + command.getName()));
     CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finishing: " + command.getName()));
