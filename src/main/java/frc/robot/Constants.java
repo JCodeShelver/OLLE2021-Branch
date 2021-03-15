@@ -89,11 +89,5 @@ public final class Constants
 
     // --------------------------------------------------------------------------
     // Auton Vars
-    public static       int     GSCPath             = 0;                       
-    /*
-      1: A-Red
-      2: A-Blue
-      3: B-Red
-      4: B-Blue
-    */
+    public static       int     GSCPath             = 0;
   }

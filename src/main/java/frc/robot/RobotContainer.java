@@ -125,7 +125,11 @@ public class RobotContainer
 
     // Run the intake, the queue, and the full auton all simultaneously.
     // We end all of them once we get three balls.
-    Command autonCommandChoice = new ParallelDeadlineGroup(new Auton(driveSystem, gyroPID), new QueueManager(loader), new AwakenTheDragon(frontIntake));
+    Command autonCommandChoice = new ParallelDeadlineGroup(
+      new Auton(driveSystem, gyroPID), 
+      new QueueManager(loader), 
+      new AwakenTheDragon(frontIntake)
+    );
     
     autonCommandChoice = new SequentialCommandGroup(
                           new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 

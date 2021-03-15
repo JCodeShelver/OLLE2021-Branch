@@ -122,6 +122,7 @@ B-Blue: 30
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 
 // Import Constants
@@ -209,18 +210,20 @@ public class Auton extends CommandBase
           Constants.GSCPath = iteration;
         }
       }
-      
-      // May as well check if it's defined now, as that'll mean we set the path and
-      // then we don't get iteration unsynced with the actual number of actions done.
-      if (Constants.GSCPath != 0)
+      else
       {
-        // When we have a set path, run set code for the iteration.
+        /*
+          When we have a set path, run set code dependent on the iteration after 
+          path determination. Because we determine the path and then end this
+          block, our path will be one less than the iteration when we first run
+          this code. 
+        */
         switch (Constants.GSCPath)
         {
           // B-Red
           case 1:
           {
-            switch (iteration)
+            switch (iteration - Constants.GSCPath)
             {
               case 1:
               {
@@ -246,7 +249,7 @@ public class Auton extends CommandBase
           // A-Red
           case 2:
           {
-            switch (iteration)
+            switch (iteration - Constants.GSCPath)
             {
               case 1:
               {
@@ -273,7 +276,7 @@ public class Auton extends CommandBase
           // B-Blue
           case 3:
           {
-            switch (iteration)
+            switch (iteration - Constants.GSCPath)
             {
               case 1:
               {
@@ -299,7 +302,7 @@ public class Auton extends CommandBase
           // A-Blue
           case 4:
           {
-            switch (iteration)
+            switch (iteration - Constants.GSCPath)
             {
               case 1:
               {
@@ -330,8 +333,12 @@ public class Auton extends CommandBase
 
     // We wait for a specified amount of time between each segment to try to
     // pick up any ball.
-    if (iteration != 3)
+    if (iteration - Constants.GSCPath != 3)
       new WaitCommand(delayTime);
+
+    SmartDashboard.putNumber("GSC Path", Constants.GSCPath);
+    SmartDashboard.putNumber("GSC Iteration", iteration);
+    SmartDashboard.putNumber("GSC Functioning Iteration", iteration - Constants.GSCPath);
   }
 
   // ----------------------------------------------------------------------------
@@ -339,6 +346,6 @@ public class Auton extends CommandBase
   @Override
   public boolean isFinished() 
   {
-    return (iteration == 3);
+    return (iteration - Constants.GSCPath == 3);
   }
 }
