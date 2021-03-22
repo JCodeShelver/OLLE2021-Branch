@@ -6,6 +6,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -101,27 +102,20 @@ public class RobotContainer
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
     // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
-    new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
-    new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
+    // new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
+    // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
-    new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake)); // Start Front Intake.
-    // Controller B is reserved and used in QueueManager. DO NOT BIND IT HERE!
+    new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake));
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
     new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
-    
-    // Stop values include:
-    // () -> loader.stop() (if you configure it as hybrid operated and not default like it is.)
-    // () -> frontIntake.stop()
-    // () -> shooter.stop()
-    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop());    
+    new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop()); 
   }
 
   // ----------------------------------------------------------------------------
   // This is our Auton Command.
   public Command getAutonomousCommand()
   {
-    boolean autonTurn           = SmartDashboard.getBoolean("AutonTurn", false);
     double  autonAngle          = SmartDashboard.getNumber("AutonAngle", 0.0);
     double  autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
     double  autonStraightSpeed  = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
@@ -129,8 +123,13 @@ public class RobotContainer
     // Zero Gyro here, in case it didn't zero on redeploy of code.
     gyroPID.resetGyro();
 
-    // Command autonCommandChoice = new ParallelDeadlineGroup(new AwakenTheDragon(frontIntake), new QueueManager(loader), Auton(driveSystem, frontIntake, loader, gyroPID);
-    Command autonCommandChoice = (autonTurn) ? new DriveTurn(driveSystem, gyroPID, autonAngle) : new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, autonAngle);
+    // Run the intake, the queue, and the full auton all simultaneously.
+    // We end all of them once we get three balls.
+    Command autonCommandChoice = new ParallelDeadlineGroup(
+      new Auton(driveSystem, gyroPID), 
+      new QueueManager(loader), 
+      new AwakenTheDragon(frontIntake)
+    );
     
     autonCommandChoice = new SequentialCommandGroup(
                           new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 
