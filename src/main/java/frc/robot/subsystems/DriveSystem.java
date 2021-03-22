@@ -43,8 +43,8 @@ public class DriveSystem extends SubsystemBase
     rightMotor2.setIdleMode(IdleMode.kBrake);
     
     linearOn  = false;
-    fullSpeed = true;
-
+    fullSpeed = false; //Orignal was true
+    
     leftMotor1.setInverted(false);
     leftMotor2.setInverted(false);
     rightMotor1.setInverted(true);
@@ -86,8 +86,8 @@ public class DriveSystem extends SubsystemBase
 
     if (!fullSpeed)
     {
-      adjustedLeft  /= 2.0;
-      adjustedRight /= 2.0;
+      adjustedLeft  *= 0.65;
+      adjustedRight *= 0.65; // Orignal was divide equal then 2.0 
     }
 
     double[] adjustedLR = {adjustedLeft, adjustedRight};
