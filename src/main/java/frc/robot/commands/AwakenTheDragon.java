@@ -30,10 +30,9 @@ public class AwakenTheDragon extends CommandBase
   public void initialize() 
   {
     // Make sure the front intake is down in Auton.
-    if (Constants.currMode == Constants.Mode.AUTONOMOUS)
+    if (!frontIntake.isOut())
     {
-      if (!frontIntake.isOut())
-        frontIntake.move();
+      frontIntake.stop();
     }
 
     // Check that when we start this, we didn't just have Aerial spamming the A
@@ -52,10 +51,10 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public void execute()
   {    
-    if (frontIntake.isOut())
-      frontIntake.drive(0.75);
-    else
-      frontIntake.drive(0.0);
+    // if (frontIntake.isOut())
+    //   frontIntake.drive(0.75);
+    // else
+    //   frontIntake.drive(0.0);
   }
 
   // ----------------------------------------------------------------------------
@@ -92,7 +91,8 @@ public class AwakenTheDragon extends CommandBase
       SmartDashboard.putBoolean("Ball Caught", Constants.ballCaught);
       
       // Stop when we get 3 balls.
-      return (Constants.ballsControlled >= 3);
+      //return (Constants.ballsControlled >= 3);
+      return false;
     }
     else 
       return false;
@@ -103,9 +103,9 @@ public class AwakenTheDragon extends CommandBase
   @Override
   public void end(boolean interrupted)
   {
-    frontIntake.drive(0.0);
+    // frontIntake.drive(0.0);
 
-    if (Constants.currMode == Constants.Mode.AUTONOMOUS)
-      frontIntake.move();
+    // if (Constants.currMode == Constants.Mode.AUTONOMOUS)
+    //   frontIntake.move();
   }
 }

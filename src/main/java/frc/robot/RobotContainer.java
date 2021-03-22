@@ -106,9 +106,9 @@ public class RobotContainer
     // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
-    new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake));
+    // new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake));
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
-    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
+    // new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop()); 
   }
 

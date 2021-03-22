@@ -51,11 +51,6 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     CommandScheduler.getInstance().run();
-
-    CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initializing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandExecute(command -> System.out.println("Command Executing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finishing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
   }
 
   @Override
