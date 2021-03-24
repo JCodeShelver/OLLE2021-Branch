@@ -30,10 +30,10 @@ public class AwakenTheDragon extends CommandBase
   public void initialize() 
   {
     // Make sure the front intake is down in Auton.
-    if (!frontIntake.isOut())
-    {
-      frontIntake.stop();
-    }
+    // if (!frontIntake.isOut())
+    // {
+    //   frontIntake.stop();
+    // }
 
     // Check that when we start this, we didn't just have Aerial spamming the A
     // button a lot.
@@ -63,13 +63,13 @@ public class AwakenTheDragon extends CommandBase
   public boolean isFinished() 
   {
     // If it's not deployed:
-    if (!frontIntake.isOut())
-    {
-      frontIntake.stop();
-      return true;
-    }
+    // if (!frontIntake.isOut())
+    // {
+    //   frontIntake.stop();
+    //   return true;
+    // }
     // Moved to entrance of conveyor (ball present and this is first time through)
-    else if (Constants.ballAtIntake && !Constants.ballCaught)
+    /* else */ if (Constants.ballAtIntake && !Constants.ballCaught)
     {
       Constants.ballsControlled ++;
       

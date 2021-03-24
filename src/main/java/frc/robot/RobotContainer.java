@@ -40,6 +40,7 @@ public class RobotContainer
     
     shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
     loader.setDefaultCommand(new QueueManager(loader));
+    frontIntake.setDefaultCommand(new AwakenTheDragon(frontIntake));
   }
 
   // ----------------------------------------------------------------------------

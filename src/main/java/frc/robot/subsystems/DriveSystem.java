@@ -86,8 +86,8 @@ public class DriveSystem extends SubsystemBase
 
     if (!fullSpeed)
     {
-      adjustedLeft  *= 0.65;
-      adjustedRight *= 0.65; // Orignal was divide equal then 2.0 
+      adjustedLeft  *= 0.75;
+      adjustedRight *= 0.75; // Orignal was divide equal then 2.0 
     }
 
     double[] adjustedLR = {adjustedLeft, adjustedRight};
