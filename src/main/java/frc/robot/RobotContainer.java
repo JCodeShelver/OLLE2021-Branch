@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.commands.*;
@@ -18,16 +19,20 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer
 {
-  private final Joystick       leftStick   = new Joystick(Constants.LEFT_STICK_USB_PORT);
-  private final Joystick       rightStick  = new Joystick(Constants.RIGHT_STICK_USB_PORT);
-  private final XboxController controller  = new XboxController(Constants.CONTROLLER_USB_PORT);
+  private final Joystick                 leftStick          = new Joystick(Constants.LEFT_STICK_USB_PORT);
+  private final Joystick                 rightStick         = new Joystick(Constants.RIGHT_STICK_USB_PORT);
+  private final XboxController           controller         = new XboxController(Constants.CONTROLLER_USB_PORT);
 
-  private final DriveSystem    driveSystem = new DriveSystem();
-  private final GyroPID        gyroPID     = new GyroPID();
-  private final VisionPID      visionPID   = new VisionPID();
-  private final FrontIntake    frontIntake = new FrontIntake();
-  private final Loader         loader      = new Loader();
-  private final Shooter        shooter     = new Shooter();
+  private final DriveSystem              driveSystem        = new DriveSystem();
+  private final GyroPID                  gyroPID            = new GyroPID();
+  private final VisionPID                visionPID          = new VisionPID();
+  private final FrontIntake              frontIntake        = new FrontIntake();
+  private final Loader                   loader             = new Loader();
+  private final Shooter                  shooter            = new Shooter();
+
+  private final SendableChooser<Command> autonCommandChoice = new SendableChooser<>();
+
+  private       double                   autonAngle, autonStraightInches, autonStraightSpeed;
 
   public RobotContainer()
   {
@@ -39,7 +44,25 @@ public class RobotContainer
       () -> -rightStick.getY()));
     
     shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
-    loader.setDefaultCommand(new QueueManager(loader));
+    loader.setDefaultCommand(new  QueueManager(loader));
+    
+    // Run the intake, the queue, and the full auton all simultaneously.
+    // We end all of them once we get three balls.
+    Command GSCAuton  = new ParallelDeadlineGroup(
+      new Auton(driveSystem, gyroPID),
+      new AwakenTheDragon(frontIntake));
+    
+    Command testAuton = new SequentialCommandGroup(
+      new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 
+      new DriveTurn(driveSystem, gyroPID, autonAngle),
+      new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 360));
+      //  new AwakenTheDragon(frontIntake, loader),
+      //  new QueueManager(loader));
+    
+    autonCommandChoice.addOption("Prototype Auton", testAuton);
+    autonCommandChoice.setDefaultOption("GSC Auton", GSCAuton);
+    
+    SmartDashboard.putData(autonCommandChoice);
   }
 
   // ----------------------------------------------------------------------------
@@ -56,18 +79,18 @@ public class RobotContainer
     |--------------+-------------------+-----------------------+----------------------------+--------------------------------------------+
     |              |      Buttons      |     Left Joystick     |       Right Joystick       |                  Xbox Controller           |
     |--------------+-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |    ______    |1       /        A | NOT BOUND             | Front Intake Toggle      OP| NOT BOUND                                  |
+    |    ______    |1       /        A | NOT BOUND             | NOT BOUND                  | Front Intake Motors                     TOP|
     |   /_____//\  |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |/     \//| |2       /        B | NOT BOUND             | NOT BOUND                  | NOT BOUND                                  |
+    |  |/     \//| |2       /        B | Shoot Ball          OP| Slow Shooter Speed       OH| NOT BOUND                                  |
     |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |   B   |/| |3       /        X | NOT BOUND             | Switch Camera Mode       OP| NOT BOUND                                  |
+    |  |   B   |/| |3       /        X | Switch Camera Mode TOP| NOT BOUND                  | Start Shooter                            OP|
     |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |       |/| |4       /        Y | NOT BOUND             | Prepare To Shoot        TOP| NOT BOUND                                  |
+    |  |       |/| |4       /        Y | NOT BOUND             | NOT BOUND                  | Move Front Intake                       TOP|
     |  |   U   |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |       |/| |5       /       LB | NOT BOUND             | Choke Shooter RPM        OH| NOT BOUND                                  |
+    |  |       |/| |5       /       LB | Toggle Speed Scale TOP| NOT BOUND                  | Manual Shooter Stop                      OP|
     |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |   T   |/| |6       /       RB | NOT BOUND             | Align to Target         TOP| Stop Front Intake motors, Shoot Ball  OH/OH|
-    |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
+    |  |   T   |/| |6       /       RB | NOT BOUND             | NOT BOUND                  | NOT BOUND                                  |
+    |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------
     |  |       |/| |7       /     Back | NOT BOUND             | NOT BOUND                  | NOT BOUND                                  |
     |  |   T   |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
     |  |       |/| |8       /    Start | NOT BOUND             | NOT BOUND                  | NOT BOUND                                  |
@@ -76,7 +99,7 @@ public class RobotContainer
     |  |       |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
     |  |       |/| |10      /       RS | NOT BOUND             | NOT BOUND                  | NOT BOUND                                  |
     |  |   N   |/| |-------------------+-----------------------+----------------------------+--------------------------------------------+
-    |  |       |/| |11      /      N/A | NOT BOUND             | Half Drive Inputs        OH| NOT APPLICABLE                             |
+    |  |       |/| |11      /      N/A | NOT BOUND             | Toggle Speed Range      TOP| NOT APPLICABLE                             |
     |  \\_____///  |-------------------+-----------------------+----------------------------+--------------------------------------------+
     |   ```````    |12      /      N/A | NOT BOUND             | NOT BOUND                  | NOT APPLICABLE                             |
     |==============+===================+=======================+============================+============================================+
@@ -116,28 +139,13 @@ public class RobotContainer
   // This is our Auton Command.
   public Command getAutonomousCommand()
   {
-    double  autonAngle          = SmartDashboard.getNumber("AutonAngle", 0.0);
-    double  autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
-    double  autonStraightSpeed  = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
-
     // Zero Gyro here, in case it didn't zero on redeploy of code.
     gyroPID.resetGyro();
-
-    // Run the intake, the queue, and the full auton all simultaneously.
-    // We end all of them once we get three balls.
-    Command autonCommandChoice = new ParallelDeadlineGroup(
-      new Auton(driveSystem, gyroPID), 
-      new QueueManager(loader), 
-      new AwakenTheDragon(frontIntake)
-    );
     
-    autonCommandChoice = new SequentialCommandGroup(
-                          new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 
-                          new DriveTurn(driveSystem, gyroPID, autonAngle),
-                          new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 360));
-                          //  new AwakenTheDragon(frontIntake, loader),
-                          //  new QueueManager(loader));
-                        
-    return autonCommandChoice;
+    autonAngle          = SmartDashboard.getNumber("AutonAngle", 0.0);
+    autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
+    autonStraightSpeed  = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
+    
+    return autonCommandChoice.getSelected();
   }
 }

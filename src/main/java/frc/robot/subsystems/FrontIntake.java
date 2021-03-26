@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 
 // Import Constants
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class FrontIntake extends SubsystemBase 
 { 
@@ -21,7 +22,7 @@ public class FrontIntake extends SubsystemBase
   private final TalonSRX       intakeMotor, STSMotor;
  
   // Indicates if the Intake is deployed.
-  private       boolean        isOut = false;
+  private       boolean        isOut = Robot.isSimulation();
 
   // ----------------------------------------------------------------------------
   // Constructor

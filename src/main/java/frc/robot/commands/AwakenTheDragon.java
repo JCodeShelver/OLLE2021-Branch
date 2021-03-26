@@ -34,6 +34,8 @@ public class AwakenTheDragon extends CommandBase
     {
       if (!frontIntake.isOut())
         frontIntake.move();
+      
+      SmartDashboard.putBoolean("Front Out", frontIntake.isOut());
     }
 
     // Check that when we start this, we didn't just have Aerial spamming the A

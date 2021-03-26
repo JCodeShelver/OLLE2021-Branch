@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 public class Robot extends TimedRobot
 {
   private Command m_autonomousCommand;
@@ -28,6 +27,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Distance from Target", 0.0);
     SmartDashboard.putNumber("Balls Controlled", 0.0);
     SmartDashboard.putNumber("Balls In System", 0.0);
+    SmartDashboard.putNumber("GSC Iteration", 0.0);
+    SmartDashboard.putNumber("GSC Functioning Iteration", 0.0);
+    
     //SmartDashboard.putBoolean("Ball In Shooter", false);
     //SmartDashboard.putBoolean("Intake Pneumatic", false);
     
@@ -44,6 +46,8 @@ public class Robot extends TimedRobot
     if (SmartDashboard.getNumber("Balls Controlled", 0.0) != 0.0)
       Constants.ballsControlled = (int) SmartDashboard.getNumber("Balls Controlled", 0.0);
 
+    SmartDashboard.putBoolean("Front Out", true);
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -52,10 +56,11 @@ public class Robot extends TimedRobot
   {
     CommandScheduler.getInstance().run();
 
-    CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initializing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandExecute(command -> System.out.println("Command Executing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finishing: " + command.getName()));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
+    SmartDashboard.updateValues();
+    // CommandScheduler.getInstance().onCommandInitialize(command -> System.out.println("Command Initializing: " + command.getName()));
+    // CommandScheduler.getInstance().onCommandExecute(command -> System.out.println("Command Executing: " + command.getName()));
+    // CommandScheduler.getInstance().onCommandFinish(command -> System.out.println("Command Finishing: " + command.getName()));
+    // CommandScheduler.getInstance().onCommandInterrupt(command -> System.out.println("Command Interrupted: " + command.getName()));
   }
 
   @Override
@@ -117,5 +122,20 @@ public class Robot extends TimedRobot
   public void testPeriodic() 
   {
     
+  }
+
+  @Override
+  public void simulationInit()
+  {
+
+  }
+
+  @Override
+  public void simulationPeriodic()
+  {
+    Constants.ballAtIntake    = SmartDashboard.getBoolean("Ball At Intake", Constants.ballAtIntake);
+    Constants.ballCaught      = SmartDashboard.getBoolean("Ball Caught", Constants.ballCaught);
+    Constants.ballWaiting     = SmartDashboard.getBoolean("Ball Waiting", Constants.ballWaiting);
+    Constants.ballsControlled = (int) SmartDashboard.getNumber("Balls Controlled", Constants.ballsControlled);
   }
 }

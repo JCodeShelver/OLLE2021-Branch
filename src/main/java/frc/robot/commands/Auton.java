@@ -148,6 +148,8 @@ public class Auton extends CommandBase
     delayTime    = 3.0;
     iteration    = -1;
 
+    Constants.GSCPath = (int) SmartDashboard.getNumber("GSC Path", Constants.GSCPath);
+
     addRequirements(driveSystem, gyroPID);
   }
 
@@ -170,11 +172,10 @@ public class Auton extends CommandBase
   public void execute()
   {
     iteration ++;
-    
     if (iteration == 0)
     {
       // Start by driving 60 inches (actually 57ish) for opening segment.
-      new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0));
+      new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, 0.0));      
     }
     else
     {
@@ -189,16 +190,16 @@ public class Auton extends CommandBase
           {
             // So we drove the first leg and didn't get a ball? Try the next stop.
             case 1:
-              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(5)) - 60, 0.0));
+              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(5)) - 60, 0.0));              
               break;
             // That didn't work? Oh well then. Try driving to the third possible first
             // stop.
             case 2:
-              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 150.0 - (30.0 * Math.sqrt(5)), 0.0));
+              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 150.0 - (30.0 * Math.sqrt(5)), 0.0));              
               break;
             // Harrumph. Go to the last stop then. Be that way.
             case 3:
-              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(26)) - 150.0, 0.0));
+              new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, (30.0 * Math.sqrt(26)) - 150.0, 0.0));              
               break;
           }
         }
@@ -228,19 +229,19 @@ public class Auton extends CommandBase
               case 1:
               {
                 // B-Red second stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 45.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 45.0));                
                 break;
               }
               case 2:
               {
                 // B-Red third stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -90.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -90.0));                
                 break;
               }
               case 3:
               {
                 // B-Red final stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 120.0, 45.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 120.0, 45.0));                
                 break;
               }
             }
@@ -254,20 +255,20 @@ public class Auton extends CommandBase
               case 1:
               {
                 // A-Red second stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 0.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(5), 0.0));                
                 break;
               }
               case 2:
               {
                 // A-Red third stint.
                 new ProxyScheduleCommand(new DriveTurn(driveSystem, gyroPID, -Math.toDegrees(Math.atan(0.5) + Math.atan(3))),
-                  new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0));
+                  new DriveStraight(driveSystem, gyroPID, 0.33, 30.0 * Math.sqrt(10), 360.0));                
                 break;
               }
               case 3:
               {
                 // A-Red final stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 150.0, Math.toDegrees(Math.atan(3))));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 150.0, Math.toDegrees(Math.atan(3))));                
                 break;
               }
             }
@@ -281,19 +282,19 @@ public class Auton extends CommandBase
               case 1:
               {
                 // B-Blue second stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -45.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), -45.0));                
                 break;
               }
               case 2:
               {
                 // B-Blue third stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 90.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0 * Math.sqrt(2), 90.0));                
                 break;
               }
               case 3:
               {
                 // B-Blue final stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 30.0, -45.0));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 30.0, -45.0));                
                 break;
               }
             }
@@ -321,7 +322,7 @@ public class Auton extends CommandBase
               case 3:
               {
                 // A-Blue final stint.
-                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, -Math.toDegrees(Math.atan(0.5))));
+                new ProxyScheduleCommand(new DriveStraight(driveSystem, gyroPID, 0.33, 60.0, -Math.toDegrees(Math.atan(0.5))));                
                 break;
               }
             }

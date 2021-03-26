@@ -106,7 +106,7 @@ public class DriveStraight extends CommandBase
   @Override
   public boolean isFinished() 
   {
-    // Continue driving until encoder measure OR emergency timer terminates action 
+    // Continue driving until encoder measure OR emergency timer terminates action
     return (Math.abs(targetDistance - driveSystem.getDistanceInches()) <= Constants.DISTANCE_TOLERANCE || segmentDriveTimer.get() >= Constants.ANGLE_TOLERANCE);
   }
 

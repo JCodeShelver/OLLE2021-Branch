@@ -85,7 +85,7 @@ public class StartTheLauncher extends CommandBase {
       After thinking about how to get the piston to stay up long enough to
       shoot, I've replicated last year's code so that when a button is
       pressed it shoots, otherwise it will lower the piston, and relies on 
-      the fact that humans are slow.
+      the fact that humans are slow. DO NOT SPAM THIS AERIAL!
     */
     if (leftStick.getRawButton(2))
       shooterSystem.shootBall();
