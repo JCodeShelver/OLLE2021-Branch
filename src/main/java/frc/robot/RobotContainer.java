@@ -44,25 +44,8 @@ public class RobotContainer
       () -> -rightStick.getY()));
     
     shooter.setDefaultCommand(new ShootDefaultActions(shooter, visionPID));
-    loader.setDefaultCommand(new  QueueManager(loader));
-    
-    // Run the intake, the queue, and the full auton all simultaneously.
-    // We end all of them once we get three balls.
-    Command GSCAuton  = new ParallelDeadlineGroup(
-      new Auton(driveSystem, gyroPID),
-      new AwakenTheDragon(frontIntake));
-    
-    Command testAuton = new SequentialCommandGroup(
-      new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 0), 
-      new DriveTurn(driveSystem, gyroPID, autonAngle),
-      new DriveStraight(driveSystem, gyroPID, autonStraightSpeed, autonStraightInches, 360));
-      //  new AwakenTheDragon(frontIntake, loader),
-      //  new QueueManager(loader));
-    
-    autonCommandChoice.addOption("Prototype Auton", testAuton);
-    autonCommandChoice.setDefaultOption("GSC Auton", GSCAuton);
-    
-    SmartDashboard.putData(autonCommandChoice);
+    loader.setDefaultCommand(new QueueManager(loader));
+    frontIntake.setDefaultCommand(new AwakenTheDragon(frontIntake));
   }
 
   // ----------------------------------------------------------------------------
@@ -129,9 +112,9 @@ public class RobotContainer
     // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
     
-    new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake));
+    // new JoystickButton(controller, XboxController.Button.kA.value).toggleWhenPressed(new AwakenTheDragon(frontIntake));
     new JoystickButton(controller, XboxController.Button.kX.value).whenPressed(new StartTheLauncher(shooter, visionPID));
-    new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
+    // new JoystickButton(controller, XboxController.Button.kY.value).whenPressed(() -> frontIntake.move());
     new JoystickButton(controller, XboxController.Button.kBumperLeft.value).whenPressed(() -> shooter.mstop()); 
   }
 
