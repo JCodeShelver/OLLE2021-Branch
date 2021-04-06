@@ -6,8 +6,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -108,6 +106,9 @@ public class RobotContainer
     // new JoystickButton(leftStick, 6).whenPressed(() -> visionPID.lightModeSwitch()); // Toggle lights on limelight.
     
     // Right Stick 2 is reserved and used in StartTheLauncher. DO NOT BIND IT HERE!
+    new JoystickButton(rightStick, 4).whenPressed(new DriveStraight(driveSystem, gyroPID, 0.33, -120.0, 360.0));
+    new JoystickButton(rightStick, 5).whenPressed(new DriveStraight(driveSystem, gyroPID, 0.33, 120.0, 360.0));
+
     // new JoystickButton(rightStick, 5).whenPressed(() -> loader.ballCountUp()); // Temporary method to "catch" a ball.
     // new JoystickButton(rightStick, 6).whenPressed(() -> loader.ballCountDown()); // Temporary method to "uncatch" a ball.
     new JoystickButton(rightStick, 11).whenPressed(() -> driveSystem.toggleSpeed()); // Toggle between full and half speed.
@@ -129,6 +130,6 @@ public class RobotContainer
     autonStraightInches = SmartDashboard.getNumber("AutonStraightInches", 30);
     autonStraightSpeed  = SmartDashboard.getNumber("AutonStraightSpeed", 0.33);
     
-    return autonCommandChoice.getSelected();
+    return null;
   }
 }

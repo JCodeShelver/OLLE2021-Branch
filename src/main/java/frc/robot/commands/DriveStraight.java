@@ -24,7 +24,7 @@ public class DriveStraight extends CommandBase
   private       Timer       segmentDriveTimer;
   
   // Required work variables
-  private       double      angleMotorAdjust, left, right, percentage, powerLevel, targetAngle, targetDistance;
+  private       double      angleMotorAdjust, left, right, percentage, powerLevel, signChange, targetAngle, targetDistance;
 
   // ----------------------------------------------------------------------------
   // Constructor:  Capture time and motor level for straight drive
@@ -34,6 +34,8 @@ public class DriveStraight extends CommandBase
     driveSystem       = d;
     gyroPID           = g;
 
+    signChange        = 1.0;
+    
     // Capture key parameters of drive segment
     powerLevel        = power;
     targetAngle       = angle;
@@ -57,6 +59,12 @@ public class DriveStraight extends CommandBase
     // Initialize gyro and encoder sensors
     gyroPID.enable();
 
+    if (targetDistance < 0)
+    {
+      signChange = -1.0;
+      targetDistance = Math.abs(targetDistance);
+    }
+    
     // So if we input 360°, then just go straight relative to current angle.
     if (targetAngle == 360)
       gyroPID.setSetpoint(gyroPID.getMeasurement());
@@ -79,8 +87,8 @@ public class DriveStraight extends CommandBase
       // Get motor adjustment derived from gyro. This keeps us driving in straight line.
       angleMotorAdjust = gyroPID.getOutput();
       
-      left             = powerLevel + angleMotorAdjust;
-      right            = powerLevel - angleMotorAdjust;
+      left             = signChange * (powerLevel + angleMotorAdjust);
+      right            = signChange * (powerLevel - angleMotorAdjust);
       
       // If just starting segment, ramp up gradually (linearly) over time period
       // If within given distance to target, begin ramping speed down linearly.
